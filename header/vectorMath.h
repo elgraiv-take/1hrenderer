@@ -45,6 +45,13 @@ inline float getNorm(Vector4D& v){
     return sqrt(v.x*v.x+v.y*v.y+v.z*v.z);
 }
 
+inline float distance(Vector4D& a,Vector4D& b){
+    float dx=a.x-b.x;
+    float dy=a.y-b.y;
+    float dz=a.z-b.z;
+    return sqrt(dx*dx+dy*dy+dz*dz);
+}
+
 inline void normalize(Vector4D& v){
     float n=getNorm(v);
     v.x/=n;

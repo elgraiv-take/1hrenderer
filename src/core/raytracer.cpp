@@ -23,6 +23,9 @@ void SimpleRayTracer::getIntersection(const RayObject& ray,RayIntersection& inte
     intersection.detect=0;
     intersection.depth=ray.maxDepth;
     intersection.ray=ray.direct;
+//    intersection.ray.x=-ray.direct.x;
+//    intersection.ray.y=-ray.direct.y;
+//    intersection.ray.z=-ray.direct.z;
     RayIntersection tempInt;
     ArrayList<PolygonMesh*>* ms=scene->getMesheList();
     int n=ms->getSize();

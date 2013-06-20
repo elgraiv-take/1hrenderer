@@ -194,22 +194,9 @@ void SimpleRenderer::render(Scene* scene,RawImage& img){
 //                img.pix[i].r=intensity;
 //                img.pix[i].g=intensity;
 //                img.pix[i].b=intensity;
-//                img.pix[i].r=intersection.point.x;
-//                img.pix[i].g=intersection.point.y;
-//                img.pix[i].b=intersection.point.z;
 
                 simplePathTrace(intersection,img.pix[i]);
 
-//                Vector4D v;
-//                v.x=1.0f;
-//                Material* mat=((Triangle*)(intersection.id))->getMaterial();
-//                if(mat->emission){
-//                    img.pix[i].r=1.0f;
-//                    img.pix[i].g=1.0f;
-//                    img.pix[i].b=1.0f;
-//                }else{
-//                    mat->brdf->function(v,v,v,v,img.pix[i]);
-//                }
             }else{
                 IBackGround* bg=currentScene->getBackGround();
                 img.pix[i].a=1.0f;
@@ -221,10 +208,6 @@ void SimpleRenderer::render(Scene* scene,RawImage& img){
                     img.pix[i].b=0.0f;
                 }
 
-
-//                img.pix[i].r=0.0f;
-//                img.pix[i].g=0.0f;
-//                img.pix[i].b=0.0f;
             }
         }
         printf("y=%d\n",y);

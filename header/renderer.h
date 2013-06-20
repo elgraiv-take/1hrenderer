@@ -11,7 +11,13 @@
 #include "dataStructure.h"
 #include "raytracer.h"
 
-class SimpleRenderer{
+class IRenderer{
+public:
+    virtual ~IRenderer(){}
+    virtual void render(Scene* scene,RawImage& img)=0;
+};
+
+class SimpleRenderer:public IRenderer{
 private:
     SimpleRayTracer tracer;
     Scene* currentScene;
@@ -22,5 +28,7 @@ private:
 public:
     void render(Scene* scene,RawImage& img);
 };
+
+
 
 #endif /* RENDERER_H_ */

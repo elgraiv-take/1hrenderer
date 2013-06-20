@@ -15,4 +15,12 @@
 //#define PATHTRACE_DEPTH_NUM (10)
 #define PATHTRACE_DEPTH_NUM (6)
 
+#define PPM_PHOTON_NUM (10000000)
+#define MAP_SIZE (15000)
+#define APPLY_SIZE (4000)
+
+#define PPM_DEFAULT_RADIUS (0.5f)
+#define PPM_ALPHA (0.7f)
+#define PPM_MAX_PHOTON_DEPTH (6)
+
 #endif /* PARAMDEF_H_ */

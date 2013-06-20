@@ -26,6 +26,8 @@ private:
     Vector4D e2;///< 頂点0->頂点2のベクトル
     AABB3D aabb;///< バウンディングボックス
 
+    float area;///< 面積
+
     Material* material;
 public:
     Triangle();
@@ -45,6 +47,8 @@ public:
 
     void getPoint(float k,float l,Vector4D& p);
     void getNormal(float k,float l,Vector4D& normal);
+
+    float getArea();
 
     void brdf(float k,float l,Vector4D& in,Vector4D& out,ColorRGBA& ret);
     Material* getMaterial();

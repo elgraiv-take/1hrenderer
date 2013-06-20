@@ -10,6 +10,7 @@
 #include "test.h"
 #include "vectorMath.h"
 #include "imageIO.h"
+#include "photon.h"
 #include <time.h>
 #include <float.h>
 
@@ -32,10 +33,11 @@ void memtest(){
 int testRender(char* outFile){
     clock_t start=clock();
     Scene* sc=getTestScene();
-    SimpleRenderer renderer;
+//    SimpleRenderer renderer;
+    PPMRenderer renderer;
 //    RawImage img(1280,960);
-//    RawImage img(640,480);
-    RawImage img(400,300);
+    RawImage img(640,480);
+//    RawImage img(400,300);
 //    RawImage img(200,150);
 //    RawImage img(128,96);
     renderer.render(sc,img);

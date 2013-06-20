@@ -72,6 +72,10 @@ int Triangle::getIntersection(const RayObject& ray,RayIntersection& intersection
     return 1;
 }
 
+float Triangle::getArea(){
+    return area;
+}
+
 void Triangle::getPoint(float k,float l,Vector4D& p){
     p.x=v0->co.x+k*e1.x+l*e2.x;
     p.y=v0->co.y+k*e1.y+l*e2.y;
@@ -113,6 +117,9 @@ void Triangle::fix(){
     VectorMath::putVtoAABB(v0->co,aabb);
     VectorMath::putVtoAABB(v1->co,aabb);
     VectorMath::putVtoAABB(v2->co,aabb);
+    Vector4D c;
+    VectorMath::cross(e1,e2,c);
+    area=VectorMath::getNorm(c)/2.0f;
 //    printf("%f %f %f\n",e1.x,e1.y,e1.z);
 //    printf("%f %f %f\n",e2.x,e2.y,e2.z);
 //    printf("%f %f %f\n",v0->co.x,v0->co.y,v0->co.z);

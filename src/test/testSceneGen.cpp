@@ -76,6 +76,7 @@ Scene* testScene2(){
     Material* light=new Material();
     light->emission=1;
     light->emitPower=20.0;
+    light->emitPower=200.0;
     ret->addMaterial(light);
     plane->setMaterialToAll(light);
     trans.z=9.9f;
@@ -131,8 +132,8 @@ Scene* testScene2(){
 
     PolygonMesh* sphere=PrimitiveGen::createSphere(4,12,24);
 //    PolygonMesh* sphere=PrimitiveGen::createSphere(4,8,16);
-//    sphere->setMaterialToAll(mirror);
-    sphere->setMaterialToAll(greenP);
+    sphere->setMaterialToAll(mirror);
+//    sphere->setMaterialToAll(greenP);
     trans.x=-2.0;
     trans.y=4;
     trans.z=2;
