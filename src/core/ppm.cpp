@@ -161,10 +161,6 @@ void PPMRenderer::render(Scene* scene,RawImage& img){
 #pragma omp critical (update)
             {
                 updateRadiance(rpms[thNo],mapCount[thNo]);
-//                for(int i=0;i<mapCount[thNo];i++){
-//
-////                    printf("%f\n",rpms[thNo][i].ray->aphoton.r);
-//                }
             }
             mapCount[thNo]=0;
         }
@@ -175,17 +171,10 @@ void PPMRenderer::render(Scene* scene,RawImage& img){
         updateRadiance(rpms[i],mapCount[i]);
     }
 
-//    for(int i=0;i<hitcount;i++){
-//        printf("%d\n",rhp[i].photonNum);
-//    }
 
     for(int i=0;i<w*h;i++){
         if(pixtype[i]==DIFFUSE){
             float rate=screenRhp[i]->radius*screenRhp[i]->radius*M_PI*PPM_PHOTON_NUM;
-//            if(screenRhp[i]->photonNum){
-//                printf("==%x\n",screenRhp[i]);
-//            }
-//            printf("%f  %f\n",rate,screenRhp[i]->aphoton.r);
             img.pix[i].r=screenRhp[i]->aphoton.r/rate;
             img.pix[i].g=screenRhp[i]->aphoton.g/rate;
             img.pix[i].b=screenRhp[i]->aphoton.b/rate;
@@ -397,44 +386,84 @@ RayHitPointContainer::~RayHitPointContainer(){
 }
 
 void RayHitPointContainer::constractKdt(int index,int axis){
-    divAxis[index]=axis;
-    int lc=index*2+1;
-    int lnum=0;
-    if(!(lc<num)){
-//        printf("%d\n",index);
-        return;
-    }else{
-        lnum=childrenCounter[lc];
-    }
-    int rc=index*2+2;
-    int rnum=0;
-    if(rc<num){
-        rnum=childrenCounter[rc];
-    }
-    int count=0;
-    int sindex=lc;
+    int* counter=new int[num];
     for(int i=0;i<num;i++){
-        RayHitPoint* tmp=sort[axis][i];
-//        if(index==0){
-//            printf("----------------------------%d--%d--%d\n",tmp->kdtIndex,index,i);
-//        }
-
-        if(tmp->kdtIndex==index){
-
-            if(count==lnum){
-                sindex=rc;
-            }else{
-                tmp->kdtIndex=sindex;
-            }
-            count++;
-            if(!(count<childrenCounter[index])){
-                break;
-            }
-        }
+        counter[i]=0;
     }
-    constractKdt(lc,NEXT_AXIS(axis));
-    constractKdt(rc,NEXT_AXIS(axis));
+    index=0;
+    axis=AXIS_X;
+    while(index<num){
+        int last=index*2+1;
+        if(last>num){
+            last=num;
+        }
+
+        for(int i=0;i<num;i++){
+            RayHitPoint* hp=sort[axis][i];
+            int in=hp->kdtIndex;
+            if(in<index){
+                continue;
+            }
+            int li=in*2+1;
+            if(li>=num){
+                continue;
+            }
+            if(counter[in]<childrenCounter[li]){
+                hp->kdtIndex=li;
+            }else if(counter[in]>childrenCounter[li]){
+                hp->kdtIndex=li+1;
+            }
+            counter[in]++;
+        }
+
+        for(int i=index;i<last;i++){
+            divAxis[i]=axis;
+        }
+        axis=NEXT_AXIS(axis);
+        index=last;
+    }
+    SAFE_DELETE_A(counter);
 }
+
+//void RayHitPointContainer::constractKdt(int index,int axis){
+//    divAxis[index]=axis;
+//    int lc=index*2+1;
+//    int lnum=0;
+//    if(!(lc<num)){
+////        printf("%d\n",index);
+//        return;
+//    }else{
+//        lnum=childrenCounter[lc];
+//    }
+//    int rc=index*2+2;
+//    int rnum=0;
+//    if(rc<num){
+//        rnum=childrenCounter[rc];
+//    }
+//    int count=0;
+//    int sindex=lc;
+//    for(int i=0;i<num;i++){
+//        RayHitPoint* tmp=sort[axis][i];
+////        if(index==0){
+////            printf("----------------------------%d--%d--%d\n",tmp->kdtIndex,index,i);
+////        }
+//
+//        if(tmp->kdtIndex==index){
+//
+//            if(count==lnum){
+//                sindex=rc;
+//            }else{
+//                tmp->kdtIndex=sindex;
+//            }
+//            count++;
+//            if(!(count<childrenCounter[index])){
+//                break;
+//            }
+//        }
+//    }
+//    constractKdt(lc,NEXT_AXIS(axis));
+//    constractKdt(rc,NEXT_AXIS(axis));
+//}
 
 void RayHitPointContainer::heepup(RayHitPoint** array,int axis,int index){
     if(index==0){
@@ -496,11 +525,11 @@ void RayHitPointContainer::applyPhotonSub(RayPhotonMap* rpm,Photon& photon,int* 
 //    printf("----------------------%f %f %f\n",photon.point.x,photon.point.y,photon.point.z);
 //    printf("-----------------------------%f\n",d);
     if(d<radius){
-
-        if((*offset)<max){
-            rpm[(*offset)].ray=kdTree[index];
+        int of=(*offset);
+        if(of<max){
+            rpm[of].ray=kdTree[index];
 //            printf("%x-%x \n",rpm[(*offset)].ray,kdTree[index]);
-            rpm[(*offset)].photon=photon;
+            rpm[of].photon=photon;
 //            printf("-----------------------------%f\n",d);
             (*offset)++;
         }

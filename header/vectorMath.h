@@ -9,6 +9,9 @@
 
 #include "xorshift.h"
 #include "root.h"
+#include <mmintrin.h>  // SSE
+#include <emmintrin.h> // SSE2
+#include <pmmintrin.h> // SSE3
 
 namespace VectorMath {
 
@@ -50,6 +53,17 @@ inline float distance(Vector4D& a,Vector4D& b){
     float dy=a.y-b.y;
     float dz=a.z-b.z;
     return sqrt(dx*dx+dy*dy+dz*dz);
+}
+
+inline float distance_simd(Vector4D& a,Vector4D& b){
+    __m128 sa,sb;
+    float dxyz[4];
+    sa=_mm_loadu_ps(a.xyzw);
+    sb=_mm_loadu_ps(b.xyzw);
+    sa=_mm_sub_ps(sa,sb);
+    sa=_mm_mul_ps(sa,sa);
+    _mm_storeu_ps(dxyz,sa);
+    return sqrt(dxyz[0]+dxyz[1]+dxyz[2]);
 }
 
 inline void normalize(Vector4D& v){

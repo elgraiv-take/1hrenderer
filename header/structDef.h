@@ -9,6 +9,7 @@
 
 #include "root.h"
 
+
 /**
  * @brief ベクトル構造体(4次元)
  *
@@ -20,7 +21,7 @@ struct Vector4D{
         };
         float xyzw[4];
         struct {
-            float r,g,b,a;
+        float r,g,b,a;
         };
         float rgba[4];
     };///< 表記に柔軟性を持たせるための共有体

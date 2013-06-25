@@ -35,8 +35,8 @@ int testRender(char* outFile){
     Scene* sc=getTestScene();
 //    SimpleRenderer renderer;
     PPMRenderer renderer;
-//    RawImage img(1280,960);
-    RawImage img(640,480);
+    RawImage img(1280,960);
+//    RawImage img(640,480);
 //    RawImage img(400,300);
 //    RawImage img(200,150);
 //    RawImage img(128,96);

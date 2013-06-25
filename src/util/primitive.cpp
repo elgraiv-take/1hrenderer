@@ -71,7 +71,7 @@ PolygonMesh* PrimitiveGen::createSphere(float size,int divh,int divv){
             v.co.x=x*size;
             v.co.y=y*size;
             v.co.z=z*size;
-            printf("%f\n",(x*x+y*y+z*z));
+//            printf("%f\n",(x*x+y*y+z*z));
             vs->set(i++,v);
         }
     }
