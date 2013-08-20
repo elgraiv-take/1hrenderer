@@ -33,7 +33,7 @@
 //#define OUTPUT_TIME_STEP (1000*10)
 //#define OUTPUT_TIME_STEP (1000*20)
 
-#define DEAD_LINE (1000*60*60*3)
+#define DEAD_LINE (1000*60*60)
 //#define DEAD_LINE (1000*60)
 //#define DEAD_LINE (1000*60)
 //#define DEAD_LINE (1000*30)

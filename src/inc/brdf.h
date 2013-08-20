@@ -55,6 +55,11 @@ private:
     float specPow;
     float specHard;
 public:
+    Phong(){
+        specPow=0.4;
+        specHard=10.0f;
+    }
+    void setSpecParam(float _specPow,float _specHard);
     void setDeffColor(ColorRGBA& color);
     void setSpecColor(ColorRGBA& color);
     void function(RayIntersection& ri,Vector4D& normal,Vector4D& in,Vector4D& out,Vector4D& tangent,ColorRGBA& ret);
