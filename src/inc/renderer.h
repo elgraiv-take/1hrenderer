@@ -10,6 +10,7 @@
 #include "root.h"
 #include "dataStructure.h"
 #include "raytracer.h"
+#include "bvhraytracer.h"
 
 class IRenderer{
 public:
@@ -19,9 +20,12 @@ public:
 
 class SimpleRenderer:public IRenderer{
 private:
-    SimpleRayTracer tracer;
+//    SimpleRayTracer tracer;
+    BVHRayTracer tracer;
     Scene* currentScene;
     float ambientOcclusion(RayIntersection& intersection);
+    void normal(RayIntersection& intersection,ColorRGBA& ret);
+    void tangent(RayIntersection& intersection,ColorRGBA& ret);
     float simpleDeffuse(RayIntersection& intersection);
     void simplePathTraceSub(RayIntersection& intersection,ColorRGBA& c,int depth);
     void simplePathTrace(RayIntersection& intersection,ColorRGBA& c);

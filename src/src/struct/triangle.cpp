@@ -60,6 +60,7 @@ int Triangle::getIntersection(const RayObject& ray,RayIntersection& intersection
     intersection.ray.y=-ray.direct.y;
     intersection.ray.z=-ray.direct.z;
     intersection.ior=ray.ior;
+    intersection.type=POLYGON_MESH;
 //    intersection.point.x=v0->co.x+k*e1.x+l*e2.x;
 //    intersection.point.y=v0->co.y+k*e1.y+l*e2.y;
 //    intersection.point.z=v0->co.z+k*e1.z+l*e2.z;
@@ -76,6 +77,36 @@ float Triangle::getArea(){
     return area;
 }
 
+void Triangle::getPoint(const RayIntersection& ri,Vector4D& p){
+    p.x=v0->co.x+ri.k*e1.x+ri.l*e2.x;
+    p.y=v0->co.y+ri.k*e1.y+ri.l*e2.y;
+    p.z=v0->co.z+ri.k*e1.z+ri.l*e2.z;
+}
+int Triangle::getNormal(const RayIntersection& ri,Vector4D& normal){
+    normal.x=((1.0f-ri.k-ri.l)*v0->normal.x+ri.k*v1->normal.x+ri.l*v2->normal.x);
+    normal.y=((1.0f-ri.k-ri.l)*v0->normal.y+ri.k*v1->normal.y+ri.l*v2->normal.y);
+    normal.z=((1.0f-ri.k-ri.l)*v0->normal.z+ri.k*v1->normal.z+ri.l*v2->normal.z);
+    float check=VectorMath::dot(ri.ray,normal);
+    if(check<0.0f){
+        normal.x*=-1.0f;
+        normal.y*=-1.0f;
+        normal.z*=-1.0f;
+        return -1;
+    }
+    return 1;
+
+//    VectorMath::cross(e1,e2,normal);
+//    VectorMath::normalize(normal);
+
+}
+
+void Triangle::getUV(const RayIntersection& ri,VectorUV& uv){
+//    uv.u=((1.0f-ri.k-ri.l)*v0->uv.u+ri.k*v1->uv.u+ri.l*v2->uv.u);
+//    uv.v=((1.0f-ri.k-ri.l)*v0->uv.v+ri.k*v1->uv.v+ri.l*v2->uv.v);
+    uv.u=((1.0f-ri.k-ri.l)*uv0.u+ri.k*uv1.u+ri.l*uv2.u);
+    uv.v=((1.0f-ri.k-ri.l)*uv0.v+ri.k*uv1.v+ri.l*uv2.v);
+}
+
 void Triangle::getPoint(float k,float l,Vector4D& p){
     p.x=v0->co.x+k*e1.x+l*e2.x;
     p.y=v0->co.y+k*e1.y+l*e2.y;
@@ -89,6 +120,14 @@ void Triangle::getNormal(float k,float l,Vector4D& normal){
 //    VectorMath::normalize(normal);
 
 }
+
+void Triangle::getTangent(const RayIntersection& intersection,Vector4D& tangent){
+    tangent.x=0.0f;
+    tangent.y=0.0f;
+    tangent.z=1.0f;
+
+}
+
 Material* Triangle::getMaterial(){
     return material;
 }
@@ -97,12 +136,12 @@ void Triangle::setMaterial(Material* _material){
     material=_material;
 }
 
-void Triangle::brdf(float k,float l,Vector4D& in,Vector4D& out,ColorRGBA& ret){
-    Vector4D normal;
-    Vector4D tan;
-    getNormal(k,l,normal);
-    material->brdf->function(normal,in,out,tan,ret);
-}
+//void Triangle::brdf(float k,float l,Vector4D& in,Vector4D& out,ColorRGBA& ret){
+//    Vector4D normal;
+//    Vector4D tan;
+//    getNormal(k,l,normal);
+//    material->brdf->function(normal,in,out,tan,ret);
+//}
 
 void Triangle::setVertex(Vertex* _v0,Vertex* _v1,Vertex* _v2){
     v0=_v0;
@@ -110,6 +149,11 @@ void Triangle::setVertex(Vertex* _v0,Vertex* _v1,Vertex* _v2){
     v2=_v2;
 }
 
+void Triangle::setUV(VectorUV& _uv0,VectorUV& _uv1,VectorUV& _uv2){
+    uv0=_uv0;
+    uv1=_uv1;
+    uv2=_uv2;
+}
 void Triangle::fix(){
     VectorMath::sub(v1->co,v0->co,e1);
     VectorMath::sub(v2->co,v0->co,e2);

@@ -25,6 +25,7 @@ void PolygonMesh::setTriangles(LargeArray<VertexIndices>* t,int num){
     for(int i=0;i<num;i++){
         VertexIndices* vi=t->getp(i);
         tmp.setVertex(vertices->getp(vi->v0),vertices->getp(vi->v1),vertices->getp(vi->v2));
+        tmp.setUV(vi->uv0,vi->uv1,vi->uv2);
         triangles->set(i,tmp);
     }
     triangleNum=num;

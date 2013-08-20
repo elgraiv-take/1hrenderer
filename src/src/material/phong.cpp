@@ -13,11 +13,11 @@ void Phong::setDeffColor(ColorRGBA& color){
 void Phong::setSpecColor(ColorRGBA& color){
     sColor=color;
 }
-void Phong::function(Vector4D& normal,Vector4D& in,Vector4D& out,Vector4D& tangent,ColorRGBA& ret){
+void Phong::function(RayIntersection& ri,Vector4D& normal,Vector4D& in,Vector4D& out,Vector4D& tangent,ColorRGBA& ret){
     specPow=0.4f;
     specHard=4.0f;
     ColorRGBA deffc;
-    deff.function(normal,in,out,tangent,deffc);
+    deff.function(ri,normal,in,out,tangent,deffc);
     Vector4D refv;
     VectorMath::reflectionVector(in,normal,refv);
     float power=VectorMath::dot(refv,out);

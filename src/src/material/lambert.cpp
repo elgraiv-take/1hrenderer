@@ -12,7 +12,7 @@ void Lambert::setColor(ColorRGBA& color){
     this->color=color;
 }
 
-void Lambert::function(Vector4D& normal,Vector4D& in,Vector4D& out,Vector4D& tangent,ColorRGBA& ret){
+void Lambert::function(RayIntersection& ri,Vector4D& normal,Vector4D& in,Vector4D& out,Vector4D& tangent,ColorRGBA& ret){
     float dotp=VectorMath::dot(normal,in);
     if(dotp<0.0f){
         dotp=0.0f;

@@ -16,7 +16,7 @@
 namespace VectorMath {
 
 /**
- * @brief 3x3ÇÃçsóÒéÆ
+ * @brief 3x3ÔøΩÃçsÔøΩÔøΩ
  */
 inline float det(
         float a11,float a12,float a13,
@@ -29,7 +29,7 @@ inline float det(
     return a1+a2+a3;
 }
 
-inline void rotXYZ(Vector4D& v,float rx,float ry,float rz,Vector4D& ret){
+inline void rotXYZ(const Vector4D& v,float rx,float ry,float rz,Vector4D& ret){
     float x=v.x;
     float y=v.y;
     float z=v.z;
@@ -44,11 +44,11 @@ inline void rotXYZ(Vector4D& v,float rx,float ry,float rz,Vector4D& ret){
     ret.z=-siny*x+cosy*sinx*y+cosx*cosy*z;
 }
 
-inline float getNorm(Vector4D& v){
+inline float getNorm(const Vector4D& v){
     return sqrt(v.x*v.x+v.y*v.y+v.z*v.z);
 }
 
-inline float distance(Vector4D& a,Vector4D& b){
+inline float distance(const Vector4D& a,const Vector4D& b){
     float dx=a.x-b.x;
     float dy=a.y-b.y;
     float dz=a.z-b.z;
@@ -85,38 +85,45 @@ inline void setRandomSphereVector(Vector4D& vec){
 //    normalize(vec);
 }
 
-inline float dot(Vector4D& a,Vector4D& b){
+inline void randomCircle(float* x,float* y){
+    float th=Xorshift::nextf()*2.0f*M_PI;
+    float r=Xorshift::nextf();
+    (*x)=sqrt(r)*cos(th);
+    (*y)=sqrt(r)*sin(th);
+}
+
+inline float dot(const Vector4D& a,const Vector4D& b){
     return a.x*b.x+a.y*b.y+a.z*b.z;
 }
 
-inline void cross(Vector4D& a,Vector4D& b,Vector4D& n){
+inline void cross(const Vector4D& a,const Vector4D& b,Vector4D& n){
     n.x=a.y*b.z-a.z*b.y;
     n.y=a.z*b.x-a.x*b.z;
     n.z=a.x*b.y-a.y*b.x;
 }
 
-inline void sub(Vector4D& a,Vector4D& b,Vector4D& diff){
+inline void sub(const Vector4D& a,const Vector4D& b,Vector4D& diff){
     diff.x=a.x-b.x;
     diff.y=a.y-b.y;
     diff.z=a.z-b.z;
 }
 
-inline void reflectionVector(Vector4D& v,Vector4D& normal,Vector4D& r){
+inline void reflectionVector(const Vector4D& v,const Vector4D& normal,Vector4D& r){
 //    printf("%f %f\n",getNorm(v),getNorm(normal));
     float d=dot(v,normal);
     r.x=-v.x+normal.x*d*2.0f;
     r.y=-v.y+normal.y*d*2.0f;
     r.z=-v.z+normal.z*d*2.0f;
 }
-inline int refractionVector(Vector4D& v,Vector4D& normal,float n1,float n2,Vector4D& r){
+inline int refractionVector(const Vector4D& v,const Vector4D& normal,int dotSig,float n1,float n2,Vector4D& r){
 //    printf("%f %f\n",getNorm(v),getNorm(normal));
     float d=dot(v,normal);
     Vector4D n;
-    if(d<0.0f){
-        d*=-1.0f;
-        n.x=-normal.x;
-        n.y=-normal.y;
-        n.z=-normal.z;
+    if(dotSig<0){
+//        d*=-1.0f;
+        n.x=normal.x;
+        n.y=normal.y;
+        n.z=normal.z;
         float tmp=n1;
         n1=n2;
         n2=tmp;

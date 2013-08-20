@@ -42,6 +42,8 @@ Scene* testScene2(){
     Vector4D trans;
     Vector4D rot;
 
+
+
     Material* white=new Material();
     Lambert* wl=new Lambert();
     ColorRGBA color;
@@ -49,6 +51,27 @@ Scene* testScene2(){
     wl->setColor(color);
     white->brdf=wl;
     ret->addMaterial(white);
+
+    Material* texture=new Material();
+    TexturedLambert* tl=new TexturedLambert();
+    RawImage* teximg;
+    ImageIO::readRawData("test.tex",&teximg);
+    tl->setTexture(teximg);
+    texture->brdf=tl;
+    ret->addMaterial(texture);
+
+    Material* morpho=new Material();
+    BinormalBRDFTable* brdft=new BinormalBRDFTable();
+    RawImage* table;
+    ImageIO::readBRDF("brdf.txt",&table);
+    brdft->setTexture(table);
+    morpho->brdf=brdft;
+    ret->addMaterial(morpho);
+
+    IsHair* hair=IsHairLoader::createTestIsHairObject();
+    ret->addIsHair(hair);
+//    hair->setMaterial(white);
+    hair->setMaterial(morpho);
 
     Material* greenP=new Material();
     Phong* gp=new Phong();
@@ -72,11 +95,11 @@ Scene* testScene2(){
     plane->translate(trans);
     ret->addMesh(plane);
 
-    plane=PrimitiveGen::createPlane(4,4);
+    plane=PrimitiveGen::createPlane(1,1);
     Material* light=new Material();
     light->emission=1;
     light->emitPower=20.0;
-    light->emitPower=200.0;
+    light->emitPower=400.0;
     ret->addMaterial(light);
     plane->setMaterialToAll(light);
     trans.z=9.9f;
@@ -85,7 +108,8 @@ Scene* testScene2(){
     ret->addMesh(plane);
 
     plane=PrimitiveGen::createPlane(10,10);
-    plane->setMaterialToAll(white);
+//    plane->setMaterialToAll(white);
+    plane->setMaterialToAll(texture);
     rot.x=TO_RAD(90.0f);
     trans.z=5.0f;
     trans.y=8.0f;
@@ -335,7 +359,185 @@ Scene* testScene1(){
     return ret;
 }
 
+////////-------------------------------------------//TODO Scene
+
+IFCamera* render1hCamera(){
+    PersCamera* ret=new PersCamera();
+    Vector4D pos(5.7,-12.4,16.4);
+    ret->setPosition(pos);
+//    Vector4D rot(TO_RAD(81.0),0.0,TO_RAD(14));
+    Vector4D rot(TO_RAD(76.0),0.0,TO_RAD(19));
+    ret->setRotation(rot);
+//    ret->setAOV(TO_RAD(67.38));
+    ret->setAOV(TO_RAD(49.134));
+    ret->setDepth(0.0f,100.0f);
+    return ret;
+}
+
+Scene* render1hScene(){
+    Scene* ret=new Scene();
+
+    Vector4D loc,rot;
+    ColorRGBA color;
+    ///----------------Light
+    //material
+    Material* roomlight=new Material();
+    roomlight->emission=1;
+    roomlight->emitPower=20000.0;
+    roomlight->emitColor.r=1.0f;
+    roomlight->emitColor.g=0.8f;
+    roomlight->emitColor.b=0.6f;
+    ret->addMaterial(roomlight);
+    //mesh
+    PolygonMesh* lightMesh=MeshLoader::readFile("light.msh");
+    lightMesh->setMaterialToAll(roomlight);
+    ret->addMesh(lightMesh);
+
+    ///----------------Light
+    //material
+    Material* tvlight=new Material();
+    tvlight->emission=1;
+    tvlight->emitPower=15000.0;
+    tvlight->emitColor.r=0.7f;
+    tvlight->emitColor.g=0.9f;
+    tvlight->emitColor.b=1.0f;
+    ret->addMaterial(tvlight);
+    //mesh
+    PolygonMesh* tvMesh=MeshLoader::readFile("tv.msh");
+    tvMesh->setMaterialToAll(tvlight);
+    loc.x=-13.0f;
+    loc.y=-5.4f;
+    loc.z=13.0f;
+    tvMesh->translate(loc);
+    rot.x=TO_RAD(90.0f);
+    rot.x=TO_RAD(0.0f);
+    rot.x=TO_RAD(120.0f);
+    tvMesh->rotate(rot);
+    ret->addMesh(tvMesh);
+
+    ///----------------Karaoke Room
+    //material
+    Material* roomwall=new Material();
+    TexturedLambert* rwtl=new TexturedLambert();
+    RawImage* wallpaper;
+    ImageIO::readRawData("wall.tex",&wallpaper);
+    rwtl->setTexture(wallpaper);
+    roomwall->brdf=rwtl;
+    ret->addMaterial(roomwall);
+    //mesh
+    PolygonMesh* roomMesh=MeshLoader::readFile("room.msh");
+//    PolygonMesh* roomMesh=PrimitiveGen::createPlane(36.0f,27.0f);
+    roomMesh->setMaterialToAll(roomwall);
+    ret->addMesh(roomMesh);
+
+    ////------------------Sofa
+    //material
+    Material* sofaMat=new Material();
+    Lambert* redl=new Lambert();
+    color.r=0.9f;
+    color.g=0.05f;
+    color.b=0.0f;
+    redl->setColor(color);
+    sofaMat->brdf=redl;
+    ret->addMaterial(sofaMat);
+    //mesh
+    PolygonMesh* sofa1=MeshLoader::readFile("sofa.msh");
+    sofa1->setMaterialToAll(sofaMat);
+    loc.x=-12.5f;
+    loc.y=9.9f;
+    loc.z=0.0f;
+    sofa1->translate(loc);
+    ret->addMesh(sofa1);
+    //mesh2
+    PolygonMesh* sofa2=MeshLoader::readFile("sofa.msh");
+    sofa2->setMaterialToAll(sofaMat);
+    loc.x=-1.65f;
+    loc.y=9.9f;
+    loc.z=0.0f;
+    sofa2->translate(loc);
+    ret->addMesh(sofa2);
+    //mesh3
+    PolygonMesh* sofa3=MeshLoader::readFile("sofa.msh");
+    sofa3->setMaterialToAll(sofaMat);
+    loc.x=9.2f;
+    loc.y=9.9f;
+    loc.z=0.0f;
+    sofa3->translate(loc);
+    ret->addMesh(sofa3);
+
+    ////-----------------------Table
+    //material
+    Material* tableMat=new Material();
+    Phong* wphong=new Phong();
+    color.r=1.0f;
+    color.g=1.0f;
+    color.b=1.0f;
+    wphong->setDeffColor(color);
+    wphong->setSpecColor(color);
+    tableMat->brdf=wphong;
+    ret->addMaterial(tableMat);
+    //mesh1
+    PolygonMesh* table1=MeshLoader::readFile("table.msh");
+    table1->setMaterialToAll(tableMat);
+    loc.x=-6.0f;
+    loc.y=0.0f;
+    loc.z=0.0f;
+    table1->translate(loc);
+    ret->addMesh(table1);
+    PolygonMesh* table2=MeshLoader::readFile("table.msh");
+    table2->setMaterialToAll(tableMat);
+    loc.x=5.6f;
+    loc.y=-0.1f;
+    loc.z=0.0f;
+    table2->translate(loc);
+    rot.x=0.0f;
+    rot.y=0.0f;
+    rot.z=TO_RAD(3.0f);
+    table2->rotate(rot);
+    ret->addMesh(table2);
+
+    ////----------------------Glass
+    //material
+    Material* glass=new Material();
+    glass->refraction=1;
+    glass->ior=1.51;
+    ret->addMaterial(glass);
+    //glass mesh
+    PolygonMesh* glassMesh=MeshLoader::readFile("glass.msh");
+    glassMesh->setMaterialToAll(glass);
+    loc.x=-2.7f;
+    loc.y=2.5f;
+    loc.z=5.577f;
+    glassMesh->translate(loc);
+    ret->addMesh(glassMesh);
+
+    ///----------------Body
+    //material
+    Material* bodymat=new Material();
+    TexturedLambert* bodytl=new TexturedLambert();
+    RawImage* bodytex;
+    ImageIO::readRawData("body.tex",&bodytex);
+    bodytl->setTexture(bodytex);
+    bodymat->brdf=bodytl;
+    ret->addMaterial(bodymat);
+    //mesh
+    PolygonMesh* bodyMesh=MeshLoader::readFile("body.msh");
+    bodyMesh->setMaterialToAll(bodymat);
+    loc.x=-1.6f;
+    loc.y=6.3f;
+    loc.z=9.0f;
+    bodyMesh->translate(loc);
+    ret->addMesh(bodyMesh);
+
+    //TODO
+
+    ret->setCamera(render1hCamera());
+    return ret;
+}
+
+
 Scene* getTestScene(){
-    return testScene2();
+//    return testScene2();
+    return render1hScene();
 }
 

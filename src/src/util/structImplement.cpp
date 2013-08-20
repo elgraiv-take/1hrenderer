@@ -122,6 +122,10 @@ Material::Material(){
     refraction=0;
     reflection=0;
     ior=1.0f;
+    emitColor.r=1.0f;
+    emitColor.g=1.0f;
+    emitColor.b=1.0f;
+    emitPower=0.0f;
 }
 
 Material::~Material(){

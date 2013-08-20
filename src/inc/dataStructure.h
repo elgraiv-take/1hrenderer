@@ -11,46 +11,56 @@
 #include "structDef.h"
 #include "largeArray.h"
 #include "arrayList.h"
+#include "renderable.h"
+#include "ishair.h"
 
 /**
- * @brief ŽOŠpŒ`ƒNƒ‰ƒX
- * ‚¢‚í‚ä‚éŽOŠpƒ|ƒŠƒSƒ“
+ * @brief ï¿½ï½½Oï¿½ï½½pï¿½ï½½`ï¿½ï½½Nï¿½ï½½ï¿½ï½½ï¿½ï½½X
+ * ï¿½ï½½ï¿½ï½½ï¿½ï½½ï¿½ï½½ï¿½ï½½ï¿½ï½½Oï¿½ï½½pï¿½ï½½|ï¿½ï½½ï¿½ï½½ï¿½ï½½Sï¿½ï½½ï¿½ï½½
  */
-class Triangle{
+class Triangle:public Renderable{
 private:
-    Vertex* v0; ///< ’¸“_0
-    Vertex* v1; ///< ’¸“_1
-    Vertex* v2; ///< ’¸“_2
+    Vertex* v0; ///< ï¿½ï½½ï¿½ï½½ï¿½ï½½_0
+    Vertex* v1; ///< ï¿½ï½½ï¿½ï½½ï¿½ï½½_1
+    Vertex* v2; ///< ï¿½ï½½ï¿½ï½½ï¿½ï½½_2
 
-    Vector4D e1;///< ’¸“_0->’¸“_1‚ÌƒxƒNƒgƒ‹
-    Vector4D e2;///< ’¸“_0->’¸“_2‚ÌƒxƒNƒgƒ‹
-    AABB3D aabb;///< ƒoƒEƒ“ƒfƒBƒ“ƒOƒ{ƒbƒNƒX
+    Vector4D e1;///< ï¿½ï½½ï¿½ï½½ï¿½ï½½_0->ï¿½ï½½ï¿½ï½½ï¿½ï½½_1ï¿½ï½½ï¾Œãƒ™ï¿½ï½½Nï¿½ï½½gï¿½ï½½ï¿½ï½½
+    Vector4D e2;///< ï¿½ï½½ï¿½ï½½ï¿½ï½½_0->ï¿½ï½½ï¿½ï½½ï¿½ï½½_2ï¿½ï½½ï¾Œãƒ™ï¿½ï½½Nï¿½ï½½gï¿½ï½½ï¿½ï½½
 
-    float area;///< –ÊÏ
+    VectorUV uv0,uv1,uv2;
+
+    float area;///< ï¿½ï½½ï¾Šæ’°ï½¿ï½½
 
     Material* material;
 public:
+    AABB3D aabb;///< ï¿½ï½½oï¿½ï½½Eï¿½ï½½ï¿½ï½½ï¿½ï½½fï¿½ï½½Bï¿½ï½½ï¿½ï½½ï¿½ï½½Oï¿½ï½½{ï¿½ï½½bï¿½ï½½Nï¿½ï½½X
     Triangle();
     void setMaterial(Material* _material);
     void setVertex(Vertex* _v0,Vertex* _v1,Vertex* _v2);
+    void setUV(VectorUV& _uv0,VectorUV& _uv1,VectorUV& _uv2);
     void fix();
     /**
-     * @brief ƒŒƒC‚Æƒ|ƒŠƒSƒ“‚ÌŒð·”»’è‚ð‚·‚é
+     * @brief ï¿½ï½½ï¿½ï½½ï¿½ï½½Cï¿½ï½½ï¾†ãƒï¿½ï½½ï¿½ï½½ï¿½ï½½Sï¿½ï½½ï¿½ï½½ï¿½ï½½ï¾Œé¯‰ï½¿ï½½ï¿½ï½½ï¿½ï½½ï¿½ï½½ï¿½ï½½ï¿½ï½½ï¿½ï½½ï¿½ï½½ï¿½ï½½ï¿½ï½½ï¿½ï½½ï¿½ï½½
      *
-     * @param ray ƒŒƒCƒIƒuƒWƒFƒNƒg
-     * @param[out] intersection Œ‹‰Ê‚ðŠi”[‚·‚éƒIƒuƒWƒFƒNƒg
-     * @return Œð·”»’è‚ÌŒ‹‰Ê
-     * @retval 0 Œð·‚µ‚È‚©‚Á‚½
-     * @retval 0ˆÈŠO Œð·‚µ‚½
+     * @param ray ï¿½ï½½ï¿½ï½½ï¿½ï½½Cï¿½ï½½Iï¿½ï½½uï¿½ï½½Wï¿½ï½½Fï¿½ï½½Nï¿½ï½½g
+     * @param[out] intersection ï¿½ï½½ï¿½ï½½ï¿½ï½½ï¾Šã‚‘ï½¿ï½½ï¿½ï½½iï¿½ï½½[ï¿½ï½½ï¿½ï½½ï¿½ï½½ï¿½ï½½Iï¿½ï½½uï¿½ï½½Wï¿½ï½½Fï¿½ï½½Nï¿½ï½½g
+     * @return ï¿½ï½½ï¿½ï½½ï¿½ï½½ï¿½ï½½ï¿½ï½½ï¿½ï½½ï¿½ï½½ï¿½ï½½ï¾Œé¯‰ï½¿ï½½ï¿½ï½½ï¿½ï½½
+     * @retval 0 ï¿½ï½½ï¿½ï½½ï¿½ï½½ï¿½ï½½ï¿½ï½½ï¿½ï½½ï¿½ï½½ï¾ˆã‚‘ï½¿ï½½ï¿½ï½½ï¿½ï½½ï¿½ï½½ï¿½ï½½
+     * @retval 0ï¿½ï½½ï¾ˆå¤– ï¿½ï½½ï¿½ï½½ï¿½ï½½ï¿½ï½½ï¿½ï½½ï¿½ï½½ï¿½ï½½ï¿½ï½½
      */
     int getIntersection(const RayObject& ray,RayIntersection& intersection);
+
+    void getPoint(const RayIntersection& intersection,Vector4D& p);
+    void getUV(const RayIntersection& intersection,VectorUV& uv);
+    int getNormal(const RayIntersection& intersection,Vector4D& normal);
+    void getTangent(const RayIntersection& intersection,Vector4D& tangent);
 
     void getPoint(float k,float l,Vector4D& p);
     void getNormal(float k,float l,Vector4D& normal);
 
     float getArea();
 
-    void brdf(float k,float l,Vector4D& in,Vector4D& out,ColorRGBA& ret);
+//    void brdf(float k,float l,Vector4D& in,Vector4D& out,ColorRGBA& ret);
     Material* getMaterial();
 };
 
@@ -78,12 +88,14 @@ public:
 
 class IFLight{
 public:
+    virtual ~IFLight(){}
     virtual void getDirection(Vector4D& pos,Vector4D& direction)=0;
     virtual float getPower(Vector4D& pos)=0;
 };
 
 class IFCamera{
 public:
+    virtual ~IFCamera(){}
     virtual void setDepth(float min,float max)=0;
     virtual void setPosition(Vector4D& _pos)=0;
     virtual void setRotation(Vector4D& _rot)=0;
@@ -101,6 +113,7 @@ private:
     ArrayList<PolygonMesh*>* meshes;
     ArrayList<IFLight*>* lights;
     ArrayList<Material*>* materials;
+    ArrayList<IsHair*>* ishairs;
     IFCamera* camera;
     IBackGround* bg;
 public:
@@ -109,8 +122,10 @@ public:
     void addMesh(PolygonMesh* m);
     void addLight(IFLight* l);
     void addMaterial(Material* m);
+    void addIsHair(IsHair* h);
     ArrayList<PolygonMesh*>* getMesheList();
     ArrayList<IFLight*>* getLightList();
+    ArrayList<IsHair*>* getIsHairList();
     void setCamera(IFCamera* c);
     void setBackGround(IBackGround* _bg);
     IFCamera* getCamera();

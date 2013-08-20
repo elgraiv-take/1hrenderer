@@ -9,7 +9,14 @@
 
 #include "dataStructure.h"
 
-class SimpleRayTracer{
+class IRayTracer{
+public:
+    virtual void setScene(Scene* _scene)=0;
+    virtual void getIntersectionFromCamera(float x,float y,RayIntersection& intersection)=0;
+    virtual void getIntersection(const RayObject& ray,RayIntersection& intersection)=0;
+};
+
+class SimpleRayTracer:public IRayTracer{
 private:
     Scene* scene;
 public:
@@ -17,6 +24,8 @@ public:
     void getIntersectionFromCamera(float x,float y,RayIntersection& intersection);
     void getIntersection(const RayObject& ray,RayIntersection& intersection);
 };
+
+
 
 
 #endif /* RAYTRACER_H_ */

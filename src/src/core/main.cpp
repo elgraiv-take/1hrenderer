@@ -11,23 +11,18 @@
 #include "vectorMath.h"
 #include "imageIO.h"
 #include "photon.h"
-#include <time.h>
+#include "main.h"
 #include <float.h>
+#include <crtdbg.h>
 
-struct Test{
-    int o[100];
-};
-void memtest(){
-    int n=1;
-    for(int i=0;i<10;i++){
-        LargeArray<Test>* array=new LargeArray<Test>(n);
-//        Test* array=new Test[n];
-        printf("ok-%d %d\n",n,i);
-        getchar();
-        delete array;
-//        delete[] array;
-        n*=10;
-    }
+void startObserverThread(PPMRenderer* renderer,int w,int h,clock_t start){
+    DWORD dwThreadID;
+    ThreadParams* param=new ThreadParams();
+    param->renderer=renderer;
+    param->w=w;
+    param->h=h;
+    param->start=start;
+    HANDLE hThread=CreateThread(NULL,0,(LPTHREAD_START_ROUTINE)observe,param,0,&dwThreadID);
 }
 
 int testRender(char* outFile){
@@ -35,11 +30,16 @@ int testRender(char* outFile){
     Scene* sc=getTestScene();
 //    SimpleRenderer renderer;
     PPMRenderer renderer;
+//    SPPMRenderer renderer;
     RawImage img(1280,960);
+//    RawImage img(1920,1080);
+//    RawImage img(1280*2,960*2);
+//    RawImage img(800,600);
 //    RawImage img(640,480);
 //    RawImage img(400,300);
 //    RawImage img(200,150);
 //    RawImage img(128,96);
+    startObserverThread(&renderer,img.w,img.h,start);
     renderer.render(sc,img);
     char* f;
     if(outFile){
@@ -47,6 +47,7 @@ int testRender(char* outFile){
     }else{
         f="test.ppm";
     }
+    ImageIO::gammaCorrection(img,2.20f);
     int res=ImageIO::writePPM(f,img);
     SAFE_DELETE_O(sc);
     clock_t end=clock();
@@ -54,37 +55,18 @@ int testRender(char* outFile){
     return res;
 }
 
-void randTest(){
-
-    float sum=0.0f;
-    int sumple=100000;
-    for(int i=0;i<sumple;i++){
-        sum+=Xorshift::nextf();
-    }
-    sum/=sumple;
-    printf("%f\n",sum);
-
-}
-
-void hdrTest(){
-    RawImage* img;
-    int res=ImageIO::readHDR("D:/workspace/eclipseWS2013/girender/data/bg.hdr",&img);
-    if(res){
-        return;
-    }
-    res=ImageIO::writePPM("d:/tmpOut/test.ppm",*img);
-}
 
 /**
- * @brief ƒƒCƒ“ŠÖ”
+ * @brief ï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Öï¿½
  *
- * @param argc argv‚Ì—v‘f”
- * @param argv [0]:ƒvƒƒOƒ‰ƒ€,[1]ˆÈ~–¢’è
- * @return ŽÀsŒ‹‰Ê
- * @retval 0 ³íI—¹
- * @retval 0ˆÈŠO ˆÙíI—¹
+ * @param argc argvï¿½Ì—vï¿½fï¿½ï¿½
+ * @param argv [0]:ï¿½vï¿½ï¿½ï¿½Oï¿½ï¿½ï¿½ï¿½,[1]ï¿½È~ï¿½ï¿½ï¿½ï¿½
+ * @return ï¿½ï¿½ï¿½sï¿½ï¿½ï¿½ï¿½
+ * @retval 0 ï¿½ï¿½ï¿½ï¿½Iï¿½ï¿½
+ * @retval 0ï¿½ÈŠO ï¿½Ùï¿½Iï¿½ï¿½
  */
 int main(int argc,char **argv){
+    _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 //    memtest();
     if(argc>1){
         testRender(argv[1]);
@@ -92,19 +74,5 @@ int main(int argc,char **argv){
         testRender(NULL);
     }
 
-//    float a=1.0f;
-//    for(int i=0;i<1000;i++){
-//        a*=10;
-//        printf("%f\n",a);
-//        if(a>FLT_MAX){
-//            printf("end\n");
-//            break;
-//
-//        }
-//    }
-
-//    hdrTest();
-//    randTest();
-//    printf("%f",VectorMath::det(3,2,3,4,5,6,7,8,10));
     return 0;
 }

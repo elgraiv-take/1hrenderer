@@ -23,9 +23,7 @@ void SimpleRayTracer::getIntersection(const RayObject& ray,RayIntersection& inte
     intersection.detect=0;
     intersection.depth=ray.maxDepth;
     intersection.ray=ray.direct;
-//    intersection.ray.x=-ray.direct.x;
-//    intersection.ray.y=-ray.direct.y;
-//    intersection.ray.z=-ray.direct.z;
+    RayObject cpRay=ray;
     RayIntersection tempInt;
     ArrayList<PolygonMesh*>* ms=scene->getMesheList();
     int n=ms->getSize();
@@ -36,14 +34,28 @@ void SimpleRayTracer::getIntersection(const RayObject& ray,RayIntersection& inte
         int m=ts->length();
         for(int j=0;j<m;j++){
             Triangle* ct=ts->getp(j);
-            if(ct==ray.id){
+            if(ct==cpRay.id){
                 continue;
             }
-            int res=ct->getIntersection(ray,tempInt);
+            int res=ct->getIntersection(cpRay,tempInt);
             if(res){
                 if(intersection.depth>tempInt.depth){
                     intersection=tempInt;
+                    cpRay.maxDepth=tempInt.depth;
                 }
+            }
+        }
+    }
+    ArrayList<IsHair*>* hs=scene->getIsHairList();
+    n=hs->getSize();
+    for(int i=0;i<n;i++){
+        IsHair* hair=hs->get(i);
+        int res=hair->getIntersection(cpRay,tempInt);
+        if(res){
+            if(intersection.depth>tempInt.depth){
+//                printf("-----");
+                intersection=tempInt;
+                cpRay.maxDepth=tempInt.depth;
             }
         }
     }

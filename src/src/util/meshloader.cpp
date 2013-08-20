@@ -41,11 +41,19 @@ PolygonMesh* MeshLoader::readFile(const char* file){
     LargeArray<VertexIndices>* ts=new LargeArray<VertexIndices>(tnum);
     VertexIndices tvi;
     int v012[3];
+    float uv012[6];
     for(int i=0;i<tnum;i++){
         fread(v012,sizeof(int),3,fp);
+        fread(uv012,sizeof(float),6,fp);
         tvi.v0=v012[0];
         tvi.v1=v012[1];
         tvi.v2=v012[2];
+        tvi.uv0.u=uv012[0];
+        tvi.uv0.v=uv012[1];
+        tvi.uv1.u=uv012[2];
+        tvi.uv1.v=uv012[3];
+        tvi.uv2.u=uv012[4];
+        tvi.uv2.v=uv012[5];
         ts->set(i,tvi);
     }
 

@@ -10,6 +10,14 @@
 #include <sys/stat.h>
 #include <errno.h>
 
+void ImageIO::gammaCorrection(RawImage& img,float gamma){
+    for(int i=0;i<img.w*img.h;i++){
+        img.pix[i].r=pow(img.pix[i].r,1/gamma);
+        img.pix[i].g=pow(img.pix[i].g,1/gamma);
+        img.pix[i].b=pow(img.pix[i].b,1/gamma);
+    }
+}
+
 int ImageIO::ccFtoI(float c){
     int ic=(int)(c*255);
     if(ic<0){
@@ -40,6 +48,43 @@ int ImageIO::writePPM(const char* fileName,const RawImage& img){
     }
     fflush(fp);
     fclose(fp);
+    return 0;
+}
+
+int ImageIO::readBRDF(const char* fileName,RawImage** img){
+    FILE* fp=fopen(fileName,"r");
+    if(!fp){
+        return -1;
+    }
+    RawImage* retimg=new RawImage(181,361);
+    int the,phy;
+    float r,g,b;
+    for(int y=0,i=0;y<361;y++){
+        for(int x=0;x<181;x++,i++){
+            fscanf(fp,"%d,%d,%f,%f,%f",&the,&phy,&r,&g,&b);
+            retimg->pix[i].r=r;
+            retimg->pix[i].g=g;
+            retimg->pix[i].b=b;
+        }
+    }
+    fclose(fp);
+    (*img)=retimg;
+    return 0;
+}
+
+int ImageIO::readRawData(const char* fileName,RawImage** img){
+    FILE* fp=fopen(fileName,"rb");
+    if(!fp){
+        return -1;
+    }
+
+    int wh[2];
+    fread(wh,sizeof(int),2,fp);
+    printf("tex%d-%d\n",wh[0],wh[1]);
+    RawImage* ret=new RawImage(wh[0],wh[1]);
+    fread(ret->pix,sizeof(ColorRGBA),wh[0]*wh[1],fp);
+    fclose(fp);
+    (*img)=ret;
     return 0;
 }
 

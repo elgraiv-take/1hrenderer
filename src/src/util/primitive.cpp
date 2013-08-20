@@ -30,9 +30,21 @@ PolygonMesh* PrimitiveGen::createPlane(float w,float h){
 
     VertexIndices t;
     t.v0=0;t.v1=1;t.v2=2;
+    t.uv0.u=1.0f;
+    t.uv0.v=0.0f;
+    t.uv1.u=0.0f;
+    t.uv1.v=0.0f;
+    t.uv2.u=0.0f;
+    t.uv2.v=1.0f;
     ts.set(0,t);
 //    t.setVertex(vs.getp(2),vs.getp(3),vs.getp(0));
     t.v0=2;t.v1=3;t.v2=0;
+    t.uv0.u=0.0f;
+    t.uv0.v=1.0f;
+    t.uv1.u=1.0f;
+    t.uv1.v=1.0f;
+    t.uv2.u=1.0f;
+    t.uv2.v=0.0f;
     ts.set(1,t);
     PolygonMesh* ret=new PolygonMesh();
     ret->setVertices(&vs,4);
