@@ -381,10 +381,10 @@ Scene* render1hScene(){
     //material
     Material* roomlight=new Material();
     roomlight->emission=1;
-    roomlight->emitPower=20000.0;
+    roomlight->emitPower=25000.0;
     roomlight->emitColor.r=1.0f;
-    roomlight->emitColor.g=0.8f;
-    roomlight->emitColor.b=0.6f;
+    roomlight->emitColor.g=0.9f;
+    roomlight->emitColor.b=0.85f;
     ret->addMaterial(roomlight);
     //mesh
     PolygonMesh* lightMesh=MeshLoader::readFile("light.msh");
@@ -621,6 +621,30 @@ Scene* render1hScene(){
     loc.z=9.0f;
     ribbonMesh->translate(loc);
     ret->addMesh(ribbonMesh);
+
+    ////----------------------------hair
+    //material
+//    Material* hairMat=new Material();
+//    Lambert* bluel=new Lambert();
+//    color.r=0.0f;
+//    color.g=0.05f;
+//    color.b=0.9f;
+//    bluel->setColor(color);
+//    hairMat->brdf=bluel;
+//    ret->addMaterial(hairMat);
+    //material//TODO
+    Material* hairMat=new Material();
+    BinormalBRDFTableForHair* brdft=new BinormalBRDFTableForHair();
+    RawImage* table;
+    ImageIO::readBRDF("hairBRDF.brdf",&table);
+    brdft->setTexture(table);
+    hairMat->brdf=brdft;
+    ret->addMaterial(hairMat);
+    //model
+    IsHair* hair=IsHairLoader::loadIsHairObject("hair.txt");
+    hair->setMaterial(hairMat);
+    ret->addIsHair(hair);
+
 
     //TODO
 

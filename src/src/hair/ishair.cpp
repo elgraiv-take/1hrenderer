@@ -383,9 +383,9 @@ int IsHairUtil::rayMarching(const IsHair* hair,const RayObject& ray,RayIntersect
     if(minDepth<0.02){
         minDepth=0.02;
     }
-    float maxstep=0.1;
-    float minstep=0.005;
-    float dstep=0.1;
+    float maxstep=0.01;
+    float minstep=0.0005;
+    float dstep=0.005;
     float depth=minDepth;
     Vector4D v=ray.start;
     v.x+=ray.direct.x*minDepth;

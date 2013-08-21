@@ -48,6 +48,14 @@ public:
     void function(RayIntersection& ri,Vector4D& normal,Vector4D& in,Vector4D& out,Vector4D& tangent,ColorRGBA& ret);
 };
 
+class BinormalBRDFTableForHair:public BRDF{
+private:
+    RawImage* table;
+public:
+    void setTexture(RawImage* _table);
+    void function(RayIntersection& ri,Vector4D& normal,Vector4D& in,Vector4D& out,Vector4D& tangent,ColorRGBA& ret);
+};
+
 class Phong:public BRDF{
 private:
     Lambert deff;

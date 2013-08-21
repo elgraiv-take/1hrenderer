@@ -70,8 +70,8 @@ void SimpleRenderer::render(Scene* scene,RawImage& img){
                 img.pix[i].r=intensity;
                 img.pix[i].g=intensity;
                 img.pix[i].b=intensity;
-//                normal(intersection,img.pix[i]);
-                tangent(intersection,img.pix[i]);
+                normal(intersection,img.pix[i]);
+//                tangent(intersection,img.pix[i]);
 
             }else{
                 IBackGround* bg=currentScene->getBackGround();
