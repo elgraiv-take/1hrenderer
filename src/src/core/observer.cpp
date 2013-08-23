@@ -53,6 +53,9 @@ void observe(LPVOID params){
             sprintf(outputFileName,"temp_%03d.ppm",i);
             ImageIO::writePPM(outputFileName,(*img));
             printf("------%s\n",outputFileName);
+        }else{
+            sprintf(outputFileName,"temp_%03d.ppm",i);
+            printf("------%s\n",outputFileName);
         }
     }
     clock_t current=clock();

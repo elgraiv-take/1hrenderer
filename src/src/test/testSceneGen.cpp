@@ -361,10 +361,12 @@ Scene* testScene1(){
 
 IFCamera* render1hCamera(){
     PersCamera* ret=new PersCamera();
-    Vector4D pos(5.7,-12.4,16.4);
+//    Vector4D pos(5.7,-12.4,16.4);
+    Vector4D pos(4.8,-9.9,15.5);
     ret->setPosition(pos);
 //    Vector4D rot(TO_RAD(81.0),0.0,TO_RAD(14));
-    Vector4D rot(TO_RAD(76.0),0.0,TO_RAD(19));
+//    Vector4D rot(TO_RAD(76.0),0.0,TO_RAD(19));
+    Vector4D rot(TO_RAD(73.0),0.0,TO_RAD(23));
     ret->setRotation(rot);
 //    ret->setAOV(TO_RAD(67.38));
     ret->setAOV(TO_RAD(49.134));

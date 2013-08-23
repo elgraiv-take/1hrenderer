@@ -31,9 +31,9 @@ int testRender(char* outFile){
 //    SimpleRenderer renderer;
     PPMRenderer renderer;
 //    SPPMRenderer renderer;
-    RawImage img(1280,960);
+//    RawImage img(1280,960);
 //    RawImage img(1920,1080);
-//    RawImage img(1280*2,960*2);
+    RawImage img(1280*2,960*2);
 //    RawImage img(800,600);
 //    RawImage img(640,480);
 //    RawImage img(400,300);
