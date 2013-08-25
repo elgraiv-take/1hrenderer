@@ -25,7 +25,6 @@ public:
 
 class TexturedLambert:public BRDF{
 private:
-//    ColorRGBA color;
     RawImage* tex;
 public:
     void setTexture(RawImage* img);

@@ -23,7 +23,6 @@ private:
         size=n;
         arraySize=MAX_SIZE_PAR_ARRAY/sizeof(T);
         arrayNum=(size/arraySize)+1;
-//        printf("%d\n",arrayNum);
         lastSize=size-(arrayNum-1)*arraySize;
         elem=new T*[arrayNum];
         for(int i=0;i<arrayNum-1;i++){

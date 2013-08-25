@@ -11,6 +11,7 @@ Scene::Scene(){
     lights=new ArrayList<IFLight*>(5);
     materials=new ArrayList<Material*>(5);
     ishairs=new ArrayList<IsHair*>(5);
+    srcimages=new ArrayList<RawImage*>(5);
     camera=NULL;
     bg=NULL;
 }
@@ -30,10 +31,21 @@ Scene::~Scene(){
         Material* mt=materials->get(i);
         SAFE_DELETE_O(mt);
     }
+    n=ishairs->getSize();
+    for(int i=0;i<n;i++){
+        IsHair* hair=ishairs->get(i);
+        SAFE_DELETE_O(hair);
+    }
+    n=srcimages->getSize();
+    for(int i=0;i<n;i++){
+        RawImage* img=srcimages->get(i);
+        SAFE_DELETE_O(img);
+    }
     SAFE_DELETE_O(meshes);
     SAFE_DELETE_O(lights);
     SAFE_DELETE_O(materials);
     SAFE_DELETE_O(ishairs);
+    SAFE_DELETE_O(srcimages);
     SAFE_DELETE_O(camera);
 }
 void Scene::addMesh(PolygonMesh* m){
@@ -47,6 +59,9 @@ void Scene::addMaterial(Material* m){
 }
 void Scene::addIsHair(IsHair* h){
     ishairs->add(h);
+}
+void Scene::addSourceImage(RawImage* i){
+    srcimages->add(i);
 }
 void Scene::setCamera(IFCamera* c){
     SAFE_DELETE_O(camera);

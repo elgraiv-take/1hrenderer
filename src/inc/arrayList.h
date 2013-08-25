@@ -26,7 +26,7 @@ public:
     void clearAll();
 };
 
-//------------------------------------------ArrayListŽÀ‘•---------------------
+//------------------------------------------ArrayList---------------------
 
 template<class T>ArrayList<T>::ArrayList(int size){
     this->size=size;

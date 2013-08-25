@@ -26,8 +26,6 @@ public:
     }
 
     static inline float nextf(){
-//        int r=rand();
-//        return r/(float)RAND_MAX;
         unsigned int i=next();
         return i/4294967296.0;
     }

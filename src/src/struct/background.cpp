@@ -26,7 +26,6 @@ void SphereImageBG::getBGColor(Vector4D& vec,ColorRGBA& bgc){
         th=(2.0f*M_PI)-th;
     }
 
-//    th+=3.0f*M_PI/2.0f;
     th+=M_PI;
     if(th>2.0f*M_PI){
         th-=2.0f*M_PI;

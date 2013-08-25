@@ -56,18 +56,9 @@ int testRender(char* outFile){
 }
 
 
-/**
- * @brief ���C���֐�
- *
- * @param argc argv�̗v�f��
- * @param argv [0]:�v���O����,[1]�ȍ~����
- * @return ���s����
- * @retval 0 ����I��
- * @retval 0�ȊO �ُ�I��
- */
 int main(int argc,char **argv){
     _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
-//    memtest();
+
     if(argc>1){
         testRender(argv[1]);
     }else{

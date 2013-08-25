@@ -25,13 +25,6 @@ float SimpleRenderer::simpleDeffuse(RayIntersection& intersection){
 }
 void SimpleRenderer::normal(RayIntersection& intersection,ColorRGBA& ret){
     Vector4D normal;
-//    if(intersection.type==IS_HAIR){
-//        IsHair* ish=(IsHair*)intersection.id;
-//        ish->getNormal(intersection,normal);
-//    }else{
-//        Triangle* pt=(Triangle*)intersection.id;
-//        pt->getNormal(intersection.k,intersection.l,normal);
-//    }
     intersection.id->getNormal(intersection,normal);
     ret.r=(normal.x+1.0f)*0.5;
     ret.g=(normal.y+1.0f)*0.5;

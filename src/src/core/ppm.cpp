@@ -25,7 +25,6 @@ inline float mbfunc2(float r){
 
 int PPMRenderer::raytraceSub(RayIntersection& intersection,RayIntersection& root,int depth){
     Renderable* pt=intersection.id;
-    //    printf("%d",depth);
     Material* mate=pt->getMaterial();
     if(mate->emission){
         root=intersection;
@@ -82,43 +81,6 @@ int PPMRenderer::raytrace(RayIntersection& intersection){
     return raytraceSub(intersection,intersection,PPM_MAX_RAY_DEPTH);
 }
 
-//void PPMRenderer::finalGather(RayHitPoint& rayhp){
-//    RayObject ray;
-//    ray.minDepth=0.0f;
-//    ray.maxDepth=2.0f;
-//    ray.id=rayhp.ri.id;
-//    Triangle* pt=(Triangle*)rayhp.ri.id;
-//    pt->getPoint(rayhp.ri.k,rayhp.ri.l,ray.start);
-//    Vector4D normal;
-//    pt->getNormal(rayhp.ri.k,rayhp.ri.l,normal);
-//    RayIntersection ri;
-//    float intensity=0.0f;
-//    for(int i=0;i<PPM_FINAL_GATHER_NUM;i++){
-//        VectorMath::setRandomSphereVector(ray.direct);
-//        float expPow=VectorMath::dot(normal,ray.direct);
-//        if(expPow<0.0f){
-//            ray.direct.x*=-1.0f;
-//            ray.direct.y*=-1.0f;
-//            ray.direct.z*=-1.0f;
-//            expPow*=-1.0f;
-//        }
-//        tracer.getIntersection(ray,ri);
-//        if(ri.detect){
-//            int res=raytrace(ri);
-//            if(res==LIGHTSOURCE){
-//                float ep=((Triangle*)ri.id)->getMaterial()->emitPower;
-//                rayhp.tempPhotonNum+=1.0f;
-//                rayhp.tempAphoton.r+=ep;
-//                rayhp.tempAphoton.g+=ep;
-//                rayhp.tempAphoton.b+=ep;
-//            }
-//        }
-//    }
-//    if(rayhp.tempPhotonNum){
-//        PPMUtil::updateRadiance1R(&rayhp);
-//    }
-//
-//}
 
 void PPMRenderer::raytracePass(int w,int h,RayIntersection* intersection,int* pixtype){
     float offx=w/2.0f;
@@ -250,9 +212,6 @@ void PPMRenderer::photonmappingPass(int w,int h,RayIntersection* intersection,in
             pix[i].r=pix[i].r<0.0f?0.0f:pix[i].r;
             pix[i].g=pix[i].g<0.0f?0.0f:pix[i].g;
             pix[i].b=pix[i].b<0.0f?0.0f:pix[i].b;
-//            pix[i].r=pow(pix[i].r,1/2.20f);
-//            pix[i].g=pow(pix[i].g,1/2.20f);
-//            pix[i].b=pow(pix[i].b,1/2.20f);
         }
     }
     printf("max-r:%f\n",maxRad);
@@ -361,7 +320,6 @@ void PPMRenderer::emitPhotonSub(RayIntersection& intersection,RayPhotonMap* map,
             pt->getNormal(intersection,normal);
             pt->getTangent(intersection,tan);
             pt->getMaterial()->brdf->function(intersection,normal,ray.direct,intersection.ray,tan,def);
-//            pt->brdf(intersection.k,intersection.l,ray.direct,intersection.ray,def);
             c.r=def.r*color.r;
             c.g=def.g*color.g;
             c.b=def.b*color.b;
@@ -409,15 +367,11 @@ void PPMUtil::updateRadiance1R(RayHitPoint* ray){
 
 void PPMRenderer::updateRadiance(RayPhotonMap* map,int num){
     ColorRGBA tc;
-//    Vector4D normal,tan;
     for(int i=0;i<num;i++){
         RayHitPoint* ray=map[i].ray;
         if(map[i].r<ray->radius){
             float weight=PPM_WEIGHT(ray->radius,map[i].r);
-
-//            ray->ri.id->getNormal(ray->ri,normal);
             ray->ri.id->getMaterial()->brdf->function(ray->ri,ray->normal,map[i].photon.direction,ray->ri.ray,ray->tangent,tc);
-//            ((Triangle*)(ray->ri.id))->brdf(ray->ri.k,ray->ri.l,map[i].photon.direction,ray->ri.ray,tc);
 //            printf("%f\n",tc.r);
             if(!(map[i].photon.color.r>=0.0f)){
                 printf("%f\n",map[i].photon.color.r); //TODO

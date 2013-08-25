@@ -31,6 +31,13 @@ private:
     Scene* scene;
     PolygonBVHNode* bvh;
 public:
+    BVHRayTracer(){
+        bvh=NULL;
+        scene=NULL;
+    }
+    ~BVHRayTracer(){
+        SAFE_DELETE_O(bvh);
+    }
     void setScene(Scene* _scene);
     void getIntersectionFromCamera(float x,float y,RayIntersection& intersection);
     void getIntersection(const RayObject& ray,RayIntersection& intersection);

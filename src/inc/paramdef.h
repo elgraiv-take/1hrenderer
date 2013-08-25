@@ -40,8 +40,8 @@
 //#define DEAD_LINE (1000*60)
 //#define DEAD_LINE (1000*30)
 
-#define SAFETY_MARGIN (1000)
-//#define SAFETY_MARGIN (2000)
+//#define SAFETY_MARGIN (1000)
+#define SAFETY_MARGIN (5000)
 
 //#define SPPM_RAY_SAMPLE (500)
 #define SPPM_RAY_SAMPLE (100)

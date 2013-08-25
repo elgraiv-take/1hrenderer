@@ -88,6 +88,4 @@ void LightSource::getRandumPhoton(RayObject& ray,ColorRGBA& color){
     color.g=sources[index]->getMaterial()->emitPower*dot*sources[index]->getMaterial()->emitColor.g;
     color.b=sources[index]->getMaterial()->emitPower*dot*sources[index]->getMaterial()->emitColor.b;
 
-//    VectorMath::dot(ray.direct)
-//    if()
 }

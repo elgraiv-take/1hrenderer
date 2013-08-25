@@ -30,7 +30,6 @@ void createCurrentImage(RayHitPoint** screenRhp,RawImage* bg,RawImage* img,int p
 }
 
 void observe(LPVOID params){
-//    printf("-----");
     ThreadParams* tp=(ThreadParams*)params;
 
     RawImage* img=new RawImage(tp->w,tp->h);
@@ -62,6 +61,6 @@ void observe(LPVOID params){
     int sleepTime=MAX(DEAD_LINE-(current-tp->start)-SAFETY_MARGIN,1);
     Sleep(sleepTime);
     tp->renderer->stopEmission();
-
+    SAFE_DELETE_O(img);
 }
 

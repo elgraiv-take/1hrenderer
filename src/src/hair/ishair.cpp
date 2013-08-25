@@ -32,10 +32,6 @@ void IsHairSkeleton::fix(){
         bone[i].bounds.center.x=(bone[i].bounds.xmax+bone[i].bounds.xmin)*0.5f;
         bone[i].bounds.center.y=(bone[i].bounds.ymax+bone[i].bounds.ymin)*0.5f;
         bone[i].bounds.center.z=(bone[i].bounds.zmax+bone[i].bounds.zmin)*0.5f;
-//        bone[i].r0=node[i].r;
-//        bone[i].r1=node[i+1].r;
-//        bone[i].v0=node[i].w;
-//        bone[i].v1=node[i+1].w;
     }
 }
 
@@ -318,8 +314,6 @@ int IsHairUtil::calcWaight(const IsHairBone& bone,const Vector4D& v,Vector4D& re
     float n12=s2;
     float n22=1.0f-s2;
 
-//    float ir=(n22*bone.r0+n12*bone.r1);
-//    float iv=(n22*bone.v0+n12*bone.v1);
     float ir=bone.ra*s2*s2*s2+bone.rb*s2*s2+bone.rc*s2+bone.rd;
     float iv=bone.va*s2*s2*s2+bone.vb*s2*s2+bone.vc*s2+bone.vd;
     float fi=SkeletonFunction::skeletonFunc(r/ir);
@@ -392,11 +386,6 @@ int IsHairUtil::rayMarching(const IsHair* hair,const RayObject& ray,RayIntersect
     v.y+=ray.direct.y*minDepth;
     v.z+=ray.direct.z*minDepth;
     Vector4D stepR;
-//    stepR.x=ray.direct.x*step;
-//    stepR.y=ray.direct.y*step;
-//    stepR.z=ray.direct.z*step;
-//    printf("^^^^^^^%f,%f\n",minDepth,maxDepth);
-//    printf("^^^^^^^%f,%f,%f^^^%f,%f,%f\n",v.x,v.y,v.z,minDepth,maxDepth,VectorMath::getNorm(stepR));//TODO a
     int cnt=0;
     float fnc=FLOAT_MAX_VAL;
     float pre=FLOAT_MAX_VAL;
@@ -425,10 +414,6 @@ int IsHairUtil::rayMarching(const IsHair* hair,const RayObject& ray,RayIntersect
             }
         }
 
-//        printf("f-%f\n",fnc);
-//        v.x+=stepR.x;
-//        v.y+=stepR.y;
-//        v.z+=stepR.z;
         v.x+=ray.direct.x*dstep;
         v.y+=ray.direct.y*dstep;
         v.z+=ray.direct.z*dstep;

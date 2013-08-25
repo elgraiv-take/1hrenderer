@@ -54,6 +54,7 @@ Scene* testScene2(){
     TexturedLambert* tl=new TexturedLambert();
     RawImage* teximg;
     ImageIO::readRawData("test.tex",&teximg);
+    ret->addSourceImage(teximg);
     tl->setTexture(teximg);
     texture->brdf=tl;
     ret->addMaterial(texture);
@@ -61,7 +62,8 @@ Scene* testScene2(){
     Material* morpho=new Material();
     BinormalBRDFTable* brdft=new BinormalBRDFTable();
     RawImage* table;
-    ImageIO::readBRDF("brdf.txt",&table);
+    ImageIO::readBRDF("brdf.brdf",&table);
+    ret->addSourceImage(table);
     brdft->setTexture(table);
     morpho->brdf=brdft;
     ret->addMaterial(morpho);
@@ -357,6 +359,7 @@ Scene* testScene1(){
     return ret;
 }
 
+
 ////////-------------------------------------------//TODO Scene
 
 IFCamera* render1hCamera(){
@@ -421,6 +424,7 @@ Scene* render1hScene(){
     TexturedLambert* rwtl=new TexturedLambert();
     RawImage* wallpaper;
     ImageIO::readRawData("wall.tex",&wallpaper);
+    ret->addSourceImage(wallpaper);
     rwtl->setTexture(wallpaper);
     roomwall->brdf=rwtl;
     ret->addMaterial(roomwall);
@@ -521,6 +525,7 @@ Scene* render1hScene(){
     TexturedLambert* bodytl=new TexturedLambert();
     RawImage* bodytex;
     ImageIO::readRawData("body.tex",&bodytex);
+    ret->addSourceImage(bodytex);
     bodytl->setTexture(bodytex);
     bodymat->brdf=bodytl;
     ret->addMaterial(bodymat);
@@ -625,20 +630,12 @@ Scene* render1hScene(){
     ret->addMesh(ribbonMesh);
 
     ////----------------------------hair
-    //material
-//    Material* hairMat=new Material();
-//    Lambert* bluel=new Lambert();
-//    color.r=0.0f;
-//    color.g=0.05f;
-//    color.b=0.9f;
-//    bluel->setColor(color);
-//    hairMat->brdf=bluel;
-//    ret->addMaterial(hairMat);
     //material//TODO
     Material* hairMat=new Material();
     BinormalBRDFTableForHair* brdft=new BinormalBRDFTableForHair();
     RawImage* table;
     ImageIO::readBRDF("hairBRDF.brdf",&table);
+    ret->addSourceImage(table);
     brdft->setTexture(table);
     hairMat->brdf=brdft;
     ret->addMaterial(hairMat);
@@ -653,9 +650,16 @@ Scene* render1hScene(){
     ret->setCamera(render1hCamera());
     return ret;
 }
+Scene* debugScene(){
+    Scene* ret=new Scene();
+    ret->setCamera(render1hCamera());
+    return ret;
+}
+
 
 Scene* getTestScene(){
 //    return testScene2();
     return render1hScene();
+//    return debugScene();
 }
 
