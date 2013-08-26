@@ -31,9 +31,9 @@ int testRender(char* outFile){
 //    SimpleRenderer renderer;
     PPMRenderer renderer;
 //    SPPMRenderer renderer;
-    RawImage img(1280,960);
+//    RawImage img(1280,960);
 //    RawImage img(1920,1080);
-//    RawImage img(1280*2,960*2);
+    RawImage img(1280*2,960*2);
 //    RawImage img(800,600);
 //    RawImage img(640,480);
 //    RawImage img(400,300);
@@ -56,18 +56,9 @@ int testRender(char* outFile){
 }
 
 
-/**
- * @brief ���C���֐�
- *
- * @param argc argv�̗v�f��
- * @param argv [0]:�v���O����,[1]�ȍ~����
- * @return ���s����
- * @retval 0 ����I��
- * @retval 0�ȊO �ُ�I��
- */
 int main(int argc,char **argv){
     _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
-//    memtest();
+
     if(argc>1){
         testRender(argv[1]);
     }else{

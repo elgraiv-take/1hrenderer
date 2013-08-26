@@ -37,10 +37,6 @@ struct RayHitPoint{
     float tempPhotonNum;
     ColorRGBA tempAphoton;
     int kdtIndex;
-//    RayHitPoint(){}
-//    RayHitPoint(const RayHitPoint& o){
-//        printf("copy");
-//    }
 };
 
 struct RayPhotonMap{
@@ -85,7 +81,6 @@ private:
 
 class PPMRenderer:public IRenderer{
 protected:
-//    SimpleRayTracer tracer;
     BVHRayTracer tracer;
     Scene* currentScene;
     LightSource* cLightSrc;
@@ -100,8 +95,6 @@ private:
     void updateRadiance(RayPhotonMap* map,int num);
     void emitPhotonSub(RayIntersection& intersection,RayPhotonMap* map,int* offset,ColorRGBA& color,int depth);
     int raytraceSub(RayIntersection& intersection,RayIntersection& root,int depth);
-
-//    void finalGather(RayHitPoint& rayhp);
 
 protected:
     void emitPhoton(RayPhotonMap* map,int* offset);

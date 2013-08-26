@@ -42,8 +42,6 @@ Scene* testScene2(){
     Vector4D trans;
     Vector4D rot;
 
-
-
     Material* white=new Material();
     Lambert* wl=new Lambert();
     ColorRGBA color;
@@ -56,6 +54,7 @@ Scene* testScene2(){
     TexturedLambert* tl=new TexturedLambert();
     RawImage* teximg;
     ImageIO::readRawData("test.tex",&teximg);
+    ret->addSourceImage(teximg);
     tl->setTexture(teximg);
     texture->brdf=tl;
     ret->addMaterial(texture);
@@ -63,7 +62,8 @@ Scene* testScene2(){
     Material* morpho=new Material();
     BinormalBRDFTable* brdft=new BinormalBRDFTable();
     RawImage* table;
-    ImageIO::readBRDF("brdf.txt",&table);
+    ImageIO::readBRDF("brdf.brdf",&table);
+    ret->addSourceImage(table);
     brdft->setTexture(table);
     morpho->brdf=brdft;
     ret->addMaterial(morpho);
@@ -359,14 +359,17 @@ Scene* testScene1(){
     return ret;
 }
 
+
 ////////-------------------------------------------//TODO Scene
 
 IFCamera* render1hCamera(){
     PersCamera* ret=new PersCamera();
-    Vector4D pos(5.7,-12.4,16.4);
+//    Vector4D pos(5.7,-12.4,16.4);
+    Vector4D pos(4.8,-9.9,15.5);
     ret->setPosition(pos);
 //    Vector4D rot(TO_RAD(81.0),0.0,TO_RAD(14));
-    Vector4D rot(TO_RAD(76.0),0.0,TO_RAD(19));
+//    Vector4D rot(TO_RAD(76.0),0.0,TO_RAD(19));
+    Vector4D rot(TO_RAD(73.0),0.0,TO_RAD(23));
     ret->setRotation(rot);
 //    ret->setAOV(TO_RAD(67.38));
     ret->setAOV(TO_RAD(49.134));
@@ -383,10 +386,10 @@ Scene* render1hScene(){
     //material
     Material* roomlight=new Material();
     roomlight->emission=1;
-    roomlight->emitPower=20000.0;
+    roomlight->emitPower=25000.0;
     roomlight->emitColor.r=1.0f;
-    roomlight->emitColor.g=0.8f;
-    roomlight->emitColor.b=0.6f;
+    roomlight->emitColor.g=0.9f;
+    roomlight->emitColor.b=0.85f;
     ret->addMaterial(roomlight);
     //mesh
     PolygonMesh* lightMesh=MeshLoader::readFile("light.msh");
@@ -421,6 +424,7 @@ Scene* render1hScene(){
     TexturedLambert* rwtl=new TexturedLambert();
     RawImage* wallpaper;
     ImageIO::readRawData("wall.tex",&wallpaper);
+    ret->addSourceImage(wallpaper);
     rwtl->setTexture(wallpaper);
     roomwall->brdf=rwtl;
     ret->addMaterial(roomwall);
@@ -479,15 +483,19 @@ Scene* render1hScene(){
     //mesh1
     PolygonMesh* table1=MeshLoader::readFile("table.msh");
     table1->setMaterialToAll(tableMat);
-    loc.x=-6.0f;
-    loc.y=0.0f;
+    loc.x=-6.1f;
+    loc.y=-1.5f;
     loc.z=0.0f;
     table1->translate(loc);
+    rot.x=0.0f;
+    rot.y=0.0f;
+    rot.z=TO_RAD(-3.0f);
+    table1->rotate(rot);
     ret->addMesh(table1);
     PolygonMesh* table2=MeshLoader::readFile("table.msh");
     table2->setMaterialToAll(tableMat);
     loc.x=5.6f;
-    loc.y=-0.1f;
+    loc.y=-0.3f;
     loc.z=0.0f;
     table2->translate(loc);
     rot.x=0.0f;
@@ -505,8 +513,8 @@ Scene* render1hScene(){
     //glass mesh
     PolygonMesh* glassMesh=MeshLoader::readFile("glass.msh");
     glassMesh->setMaterialToAll(glass);
-    loc.x=-2.7f;
-    loc.y=2.5f;
+    loc.x=-5.8f;
+    loc.y=1.9f;
     loc.z=5.577f;
     glassMesh->translate(loc);
     ret->addMesh(glassMesh);
@@ -517,6 +525,7 @@ Scene* render1hScene(){
     TexturedLambert* bodytl=new TexturedLambert();
     RawImage* bodytex;
     ImageIO::readRawData("body.tex",&bodytex);
+    ret->addSourceImage(bodytex);
     bodytl->setTexture(bodytex);
     bodymat->brdf=bodytl;
     ret->addMaterial(bodymat);
@@ -524,13 +533,125 @@ Scene* render1hScene(){
     PolygonMesh* bodyMesh=MeshLoader::readFile("body.msh");
     bodyMesh->setMaterialToAll(bodymat);
     loc.x=-1.6f;
-    loc.y=6.3f;
+    loc.y=6.6f;
     loc.z=9.0f;
     bodyMesh->translate(loc);
     ret->addMesh(bodyMesh);
 
+    ///----------------Shirt
+    //material
+    Material* shirtmat=new Material();
+    Lambert* shirtl=new Lambert();
+    color.r=1.0f;
+    color.g=1.0f;
+    color.b=1.0f;
+    shirtl->setColor(color);
+    shirtmat->brdf=shirtl;
+    ret->addMaterial(shirtmat);
+    //mesh
+    PolygonMesh* shirtMesh=MeshLoader::readFile("shirt.msh");
+    shirtMesh->setMaterialToAll(shirtmat);
+    loc.x=-1.6f;
+    loc.y=6.6f;
+    loc.z=9.0f;
+    shirtMesh->translate(loc);
+    ret->addMesh(shirtMesh);
+
+    /////--------------------------Skirt
+    //material
+    Material* skirtMat=new Material();
+    Phong* skirtphong=new Phong();
+    color.r=0.01f;
+    color.g=0.05f;
+    color.b=0.3f;
+    skirtphong->setDeffColor(color);
+    color.r=1.0f;
+    color.g=1.0f;
+    color.b=1.0f;
+    skirtphong->setSpecColor(color);
+    skirtphong->setSpecParam(0.1f,10.0f);
+    skirtMat->brdf=skirtphong;
+    ret->addMaterial(skirtMat);
+    //mesh
+    PolygonMesh* skirtMesh=MeshLoader::readFile("skirt.msh");
+    skirtMesh->setMaterialToAll(skirtMat);
+    loc.x=-1.6f;
+    loc.y=6.6f;
+    loc.z=9.0f;
+    skirtMesh->translate(loc);
+    ret->addMesh(skirtMesh);
+
+    /////--------------------------Mike
+    //material
+    Material* mikeMat=new Material();
+    Phong* mikephong=new Phong();
+    color.r=0.04f;
+    color.g=0.04f;
+    color.b=0.04f;
+    mikephong->setDeffColor(color);
+    color.r=1.0f;
+    color.g=1.0f;
+    color.b=1.0f;
+    mikephong->setSpecColor(color);
+    mikephong->setSpecParam(0.5f,10.0f);
+    mikeMat->brdf=mikephong;
+    ret->addMaterial(mikeMat);
+    //mesh
+    PolygonMesh* mikeMesh=MeshLoader::readFile("mike.msh");
+    mikeMesh->setMaterialToAll(mikeMat);
+    loc.x=-1.6f;
+    loc.y=6.6f;
+    loc.z=9.0f;
+    mikeMesh->translate(loc);
+    ret->addMesh(mikeMesh);
+
+    /////--------------------------Ribbon
+    //material
+    Material* ribbonMat=new Material();
+    Phong* ribbonphong=new Phong();
+    color.r=1.0f;
+    color.g=0.0f;
+    color.b=0.0f;
+    ribbonphong->setDeffColor(color);
+    color.r=1.0f;
+    color.g=1.0f;
+    color.b=1.0f;
+    ribbonphong->setSpecColor(color);
+    ribbonphong->setSpecParam(0.3f,10.0f);
+    ribbonMat->brdf=ribbonphong;
+    ret->addMaterial(ribbonMat);
+    //mesh
+    PolygonMesh* ribbonMesh=MeshLoader::readFile("ribbon.msh");
+    ribbonMesh->setMaterialToAll(ribbonMat);
+    loc.x=-1.6f;
+    loc.y=6.6f;
+    loc.z=9.0f;
+    ribbonMesh->translate(loc);
+    ret->addMesh(ribbonMesh);
+
+    ////----------------------------hair
+    //material//TODO
+    Material* hairMat=new Material();
+    BinormalBRDFTableForHair* brdft=new BinormalBRDFTableForHair();
+    RawImage* table;
+    ImageIO::readBRDF("hairBRDF.brdf",&table);
+    ret->addSourceImage(table);
+    brdft->setTexture(table);
+    hairMat->brdf=brdft;
+    ret->addMaterial(hairMat);
+    //model
+    IsHair* hair=IsHairLoader::loadIsHairObject("hair.txt");
+    hair->setMaterial(hairMat);
+    ret->addIsHair(hair);
+
+
     //TODO
 
+    ret->setCamera(render1hCamera());
+    return ret;
+}
+Scene* debugScene(){
+    Scene* ret=new Scene();
     ret->setCamera(render1hCamera());
     return ret;
 }
@@ -539,5 +660,6 @@ Scene* render1hScene(){
 Scene* getTestScene(){
 //    return testScene2();
     return render1hScene();
+//    return debugScene();
 }
 

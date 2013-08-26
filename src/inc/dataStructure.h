@@ -14,40 +14,28 @@
 #include "renderable.h"
 #include "ishair.h"
 
-/**
- * @brief �ｽO�ｽp�ｽ`�ｽN�ｽ�ｽ�ｽX
- * �ｽ�ｽ�ｽ�ｽ�ｽ�ｽO�ｽp�ｽ|�ｽ�ｽ�ｽS�ｽ�ｽ
- */
 class Triangle:public Renderable{
 private:
-    Vertex* v0; ///< �ｽ�ｽ�ｽ_0
-    Vertex* v1; ///< �ｽ�ｽ�ｽ_1
-    Vertex* v2; ///< �ｽ�ｽ�ｽ_2
+    Vertex* v0;
+    Vertex* v1;
+    Vertex* v2;
 
-    Vector4D e1;///< �ｽ�ｽ�ｽ_0->�ｽ�ｽ�ｽ_1�ｽﾌベ�ｽN�ｽg�ｽ�ｽ
-    Vector4D e2;///< �ｽ�ｽ�ｽ_0->�ｽ�ｽ�ｽ_2�ｽﾌベ�ｽN�ｽg�ｽ�ｽ
+    Vector4D e1;
+    Vector4D e2;
 
     VectorUV uv0,uv1,uv2;
 
-    float area;///< �ｽﾊ撰ｿｽ
+    float area;
 
     Material* material;
 public:
-    AABB3D aabb;///< �ｽo�ｽE�ｽ�ｽ�ｽf�ｽB�ｽ�ｽ�ｽO�ｽ{�ｽb�ｽN�ｽX
+    AABB3D aabb;
     Triangle();
     void setMaterial(Material* _material);
     void setVertex(Vertex* _v0,Vertex* _v1,Vertex* _v2);
     void setUV(VectorUV& _uv0,VectorUV& _uv1,VectorUV& _uv2);
     void fix();
-    /**
-     * @brief �ｽ�ｽ�ｽC�ｽﾆポ�ｽ�ｽ�ｽS�ｽ�ｽ�ｽﾌ鯉ｿｽ�ｽ�ｽ�ｽ�ｽ�ｽ�ｽ�ｽ�ｽ�ｽ�ｽ�ｽ
-     *
-     * @param ray �ｽ�ｽ�ｽC�ｽI�ｽu�ｽW�ｽF�ｽN�ｽg
-     * @param[out] intersection �ｽ�ｽ�ｽﾊゑｿｽ�ｽi�ｽ[�ｽ�ｽ�ｽ�ｽI�ｽu�ｽW�ｽF�ｽN�ｽg
-     * @return �ｽ�ｽ�ｽ�ｽ�ｽ�ｽ�ｽ�ｽﾌ鯉ｿｽ�ｽ�ｽ
-     * @retval 0 �ｽ�ｽ�ｽ�ｽ�ｽ�ｽ�ｽﾈゑｿｽ�ｽ�ｽ�ｽ�ｽ
-     * @retval 0�ｽﾈ外 �ｽ�ｽ�ｽ�ｽ�ｽ�ｽ�ｽ�ｽ
-     */
+
     int getIntersection(const RayObject& ray,RayIntersection& intersection);
 
     void getPoint(const RayIntersection& intersection,Vector4D& p);
@@ -60,7 +48,6 @@ public:
 
     float getArea();
 
-//    void brdf(float k,float l,Vector4D& in,Vector4D& out,ColorRGBA& ret);
     Material* getMaterial();
 };
 
@@ -114,6 +101,7 @@ private:
     ArrayList<IFLight*>* lights;
     ArrayList<Material*>* materials;
     ArrayList<IsHair*>* ishairs;
+    ArrayList<RawImage*>* srcimages;
     IFCamera* camera;
     IBackGround* bg;
 public:
@@ -123,13 +111,13 @@ public:
     void addLight(IFLight* l);
     void addMaterial(Material* m);
     void addIsHair(IsHair* h);
+    void addSourceImage(RawImage* i);
     ArrayList<PolygonMesh*>* getMesheList();
     ArrayList<IFLight*>* getLightList();
     ArrayList<IsHair*>* getIsHairList();
     void setCamera(IFCamera* c);
     void setBackGround(IBackGround* _bg);
     IFCamera* getCamera();
-//    void getBGColor(Vector4D& vec,ColorRGBA& bgc);
     IBackGround* getBackGround();
 };
 

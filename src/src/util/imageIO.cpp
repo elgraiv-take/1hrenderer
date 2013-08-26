@@ -167,9 +167,6 @@ int ImageIO::readHDR(const char* fileName,RawImage** img){
             retimg->pix[(y*w+x)].r=(float)(rowbuff[x]*pow(2.0f,rowbuff[x+3*w]-128));
             retimg->pix[(y*w+x)].g=(float)(rowbuff[x+w]*pow(2.0f,rowbuff[x+3*w]-128));
             retimg->pix[(y*w+x)].b=(float)(rowbuff[x+2*w]*pow(2.0f,rowbuff[x+3*w]-128));
-//            retimg->pix[(y*w+x)].r=log(1+retimg->pix[(y*w+x)].r)/10;
-//            retimg->pix[(y*w+x)].g=log(1+retimg->pix[(y*w+x)].g)/10;
-//            retimg->pix[(y*w+x)].b=log(1+retimg->pix[(y*w+x)].b)/10;
             retimg->pix[(y*w+x)].r=pow(1+retimg->pix[(y*w+x)].r,1/2.2f);
             retimg->pix[(y*w+x)].g=pow(1+retimg->pix[(y*w+x)].g,1/2.2f);
             retimg->pix[(y*w+x)].b=pow(1+retimg->pix[(y*w+x)].b,1/2.2f);

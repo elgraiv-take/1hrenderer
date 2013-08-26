@@ -15,9 +15,6 @@
 
 namespace VectorMath {
 
-/**
- * @brief 3x3�̍s��
- */
 inline float det(
         float a11,float a12,float a13,
         float a21,float a22,float a23,
@@ -79,10 +76,6 @@ inline void setRandomSphereVector(Vector4D& vec){
     float phi=Xorshift::nextf()*2.0f*M_PI;
     vec.x=sqrt(1-z*z)*cos(phi);
     vec.y=sqrt(1-z*z)*sin(phi);
-//    vec.x=Xorshift::nextf()*2.0f-1.0f;
-//    vec.y=Xorshift::nextf()*2.0f-1.0f;
-//    vec.z=Xorshift::nextf()*2.0f-1.0f;
-//    normalize(vec);
 }
 
 inline void randomCircle(float* x,float* y){
@@ -109,18 +102,15 @@ inline void sub(const Vector4D& a,const Vector4D& b,Vector4D& diff){
 }
 
 inline void reflectionVector(const Vector4D& v,const Vector4D& normal,Vector4D& r){
-//    printf("%f %f\n",getNorm(v),getNorm(normal));
     float d=dot(v,normal);
     r.x=-v.x+normal.x*d*2.0f;
     r.y=-v.y+normal.y*d*2.0f;
     r.z=-v.z+normal.z*d*2.0f;
 }
 inline int refractionVector(const Vector4D& v,const Vector4D& normal,int dotSig,float n1,float n2,Vector4D& r){
-//    printf("%f %f\n",getNorm(v),getNorm(normal));
     float d=dot(v,normal);
     Vector4D n;
     if(dotSig<0){
-//        d*=-1.0f;
         n.x=normal.x;
         n.y=normal.y;
         n.z=normal.z;
@@ -142,7 +132,6 @@ inline int refractionVector(const Vector4D& v,const Vector4D& normal,int dotSig,
     r.x=-n1n2*(v.x-d*n.x)-n.x*sqrta;
     r.y=-n1n2*(v.y-d*n.y)-n.y*sqrta;
     r.z=-n1n2*(v.z-d*n.z)-n.z*sqrta;
-//    printf("%f %f\n",getNorm(v),getNorm(r));
     normalize(r);
     return 0;
 }

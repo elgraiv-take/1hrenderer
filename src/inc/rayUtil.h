@@ -96,7 +96,6 @@ inline int checkRayRange(const AABB3D& aabb,const RayObject& ray,float* min,floa
         tmin=MIN(tmin,t);
         c1++;
     }
-//    printf("%f,%f,%f,%f,%f,%f\n",aabb.xmin,aabb.xmax,aabb.ymin,aabb.ymax,aabb.zmin,aabb.zmax);
     if(c1>1){
         (*max)=tmax;
         (*min)=tmin;

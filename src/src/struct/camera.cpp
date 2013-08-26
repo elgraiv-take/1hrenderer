@@ -50,9 +50,5 @@ void PersCamera::getRayObject(float x,float y,RayObject& ray){
     ray.direct.y=scale*x*ex.y+scale*y*ey.y+ez.y;
     ray.direct.z=scale*x*ex.z+scale*y*ey.z+ez.z;
     VectorMath::normalize(ray.direct);
-//    printf("%f %f %f %f %f\n",ray.start.x,ray.start.y,ray.start.z,x,y);
-//    if(y<0.01&&y>-0.01&&x<0.01&&x>-0.01){
-//        printf("%f %f %f %f %f\n",ray.direct.x,ray.direct.y,ray.direct.z,x,y);
-//    }
 
 }

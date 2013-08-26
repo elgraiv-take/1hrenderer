@@ -12,7 +12,7 @@ take(@elgraiv_take)
 ・技術的アピールポイント
 GIはPPM(実装がかなり怪しい)
 BVHはメディアンベースの適当実装
-陰関数表現の髪の毛を使う予定だった(実装済み)
+skeleton-basedでblobby-likeなimplicit surfaceを使った髪の毛
 
 ・ビルドの設定
 とりあえずデフォルトのReleaseビルドから
@@ -20,3 +20,8 @@ BVHはメディアンベースの適当実装
 最適化:実行速度の最大化
 OpenMPのサポート:はい(/openmp)
 インクルードディレクトリ:incを追加
+
+・その他
+texturesの中はBRDFとテクスチャに使った画像
+実行結果はPPM形式で出力されたものを縮小してpngに変換したもの
+BRDFのテーブルは手描き

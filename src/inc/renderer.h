@@ -20,7 +20,6 @@ public:
 
 class SimpleRenderer:public IRenderer{
 private:
-//    SimpleRayTracer tracer;
     BVHRayTracer tracer;
     Scene* currentScene;
     float ambientOcclusion(RayIntersection& intersection);

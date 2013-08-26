@@ -62,6 +62,9 @@ void sortBone(Triangle** tris,int size,int axis){
 PolygonBVHNode* createBVHR(Triangle** tris,int offset,int size,int axis){
     PolygonBVHNode* ret=new PolygonBVHNode();
     if(size<5){
+        if(!size){
+            return ret;
+        }
         ret->num=size;
         ret->triangles[0]=tris[offset];
         ret->bounds=tris[offset]->aabb;
@@ -159,7 +162,9 @@ void BVHRayTracer::setScene(Scene* _scene){
     }
 
     bvh=PolygonBVHUtil::createBVHR(tris,0,trinum,0);
+    printf("tnum=%d\n",trinum);
     printf("%f,%f,%f,%f,%f,%f,\n",bvh->bounds.xmin,bvh->bounds.xmax,bvh->bounds.ymin,bvh->bounds.ymax,bvh->bounds.zmin,bvh->bounds.zmax);
+    SAFE_DELETE_A(tris);
 }
 
 void BVHRayTracer::getIntersectionFromCamera(float x,float y,RayIntersection& intersection){
@@ -178,29 +183,6 @@ void BVHRayTracer::getIntersection(const RayObject& ray,RayIntersection& interse
     RayObject cpRay=ray;
     RayIntersection tempInt;
     PolygonBVHUtil::traverse(bvh,cpRay,intersection);
-//    ArrayList<PolygonMesh*>* ms=scene->getMesheList();
-//    int n=ms->getSize();
-//
-//    for(int i=0;i<n;i++){
-//        PolygonMesh* pm=ms->get(i);
-//        LargeArray<Triangle>* ts=pm->getTriangleList();
-//        int m=ts->length();
-//        for(int j=0;j<m;j++){
-//            Triangle* ct=ts->getp(j);
-//            if(ct==cpRay.id){
-//                continue;
-//            }
-//            int res=ct->getIntersection(cpRay,tempInt);
-//            if(res){
-//                if(intersection.depth>tempInt.depth){
-//                    intersection=tempInt;
-//                    cpRay.maxDepth=tempInt.depth;
-//                }
-//            }
-//        }
-//    }
-
-
 
     ArrayList<IsHair*>* hs=scene->getIsHairList();
     int n2=hs->getSize();
@@ -209,7 +191,6 @@ void BVHRayTracer::getIntersection(const RayObject& ray,RayIntersection& interse
         int res=hair->getIntersection(cpRay,tempInt);
         if(res){
             if(intersection.depth>tempInt.depth){
-                //                printf("-----");
                 intersection=tempInt;
                 cpRay.maxDepth=tempInt.depth;
             }

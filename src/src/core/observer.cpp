@@ -30,7 +30,6 @@ void createCurrentImage(RayHitPoint** screenRhp,RawImage* bg,RawImage* img,int p
 }
 
 void observe(LPVOID params){
-//    printf("-----");
     ThreadParams* tp=(ThreadParams*)params;
 
     RawImage* img=new RawImage(tp->w,tp->h);
@@ -53,12 +52,15 @@ void observe(LPVOID params){
             sprintf(outputFileName,"temp_%03d.ppm",i);
             ImageIO::writePPM(outputFileName,(*img));
             printf("------%s\n",outputFileName);
+        }else{
+            sprintf(outputFileName,"temp_%03d.ppm",i);
+            printf("------%s\n",outputFileName);
         }
     }
     clock_t current=clock();
     int sleepTime=MAX(DEAD_LINE-(current-tp->start)-SAFETY_MARGIN,1);
     Sleep(sleepTime);
     tp->renderer->stopEmission();
-
+    SAFE_DELETE_O(img);
 }
 

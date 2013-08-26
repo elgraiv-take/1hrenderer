@@ -25,9 +25,6 @@ RayHitPointContainer::RayHitPointContainer(RayHitPoint* _hitpoints,int n){
     maxRadius=new float[n];
     divAxis=new int[n];
     for(int i=0;i<n;i++){
-//        if(i<5){
-//            printf("%x\n",&(hitpoints[i]));
-//        }
 
         maxRadius[i]=PPM_DEFAULT_RADIUS;
         hitpoints[i].kdtIndex=0;
@@ -43,26 +40,16 @@ RayHitPointContainer::RayHitPointContainer(RayHitPoint* _hitpoints,int n){
     }
     printf("sort\n");
     sortPoint(sort[AXIS_X],AXIS_X);
-//    for(int i=1;i<num;i++){
-//        printf("%f-------%f\n",sort[AXIS_X][i]->ri.point.xyzw[AXIS_X],sort[AXIS_X][i-1]->ri.point.xyzw[AXIS_X]);
-//        if(sort[AXIS_X][i]->ri.point.xyzw[AXIS_X]<sort[AXIS_X][i-1]->ri.point.xyzw[AXIS_X]){
-//            printf("%f-------%f\n",sort[AXIS_X][i]->ri.point.xyzw[AXIS_X],sort[AXIS_X][i-1]->ri.point.xyzw[AXIS_X]);
-//        }
-//    }
     sortPoint(sort[AXIS_Y],AXIS_Y);
     sortPoint(sort[AXIS_Z],AXIS_Z);
     printf("sort comp\n");
     constractKdt(0,AXIS_X);
     for(int i=0;i<n;i++){
         kdTree[hitpoints[i].kdtIndex]=(&(hitpoints[i]));
-        //printf("%x %x \n",kdTree[hitpoints[i].kdtIndex],(&(hitpoints[i])));
     }
 }
 
 RayHitPointContainer::~RayHitPointContainer(){
-//    for(int i=0;i<num;i++){
-//        printf("%f\n",hitpoints[i].aphoton.r);
-//    }
     SAFE_DELETE_A(sort[0]);
     SAFE_DELETE_A(sort[1]);
     SAFE_DELETE_A(sort[2]);
@@ -111,46 +98,6 @@ void RayHitPointContainer::constractKdt(int index,int axis){
     }
     SAFE_DELETE_A(counter);
 }
-
-//void RayHitPointContainer::constractKdt(int index,int axis){
-//    divAxis[index]=axis;
-//    int lc=index*2+1;
-//    int lnum=0;
-//    if(!(lc<num)){
-////        printf("%d\n",index);
-//        return;
-//    }else{
-//        lnum=childrenCounter[lc];
-//    }
-//    int rc=index*2+2;
-//    int rnum=0;
-//    if(rc<num){
-//        rnum=childrenCounter[rc];
-//    }
-//    int count=0;
-//    int sindex=lc;
-//    for(int i=0;i<num;i++){
-//        RayHitPoint* tmp=sort[axis][i];
-////        if(index==0){
-////            printf("----------------------------%d--%d--%d\n",tmp->kdtIndex,index,i);
-////        }
-//
-//        if(tmp->kdtIndex==index){
-//
-//            if(count==lnum){
-//                sindex=rc;
-//            }else{
-//                tmp->kdtIndex=sindex;
-//            }
-//            count++;
-//            if(!(count<childrenCounter[index])){
-//                break;
-//            }
-//        }
-//    }
-//    constractKdt(lc,NEXT_AXIS(axis));
-//    constractKdt(rc,NEXT_AXIS(axis));
-//}
 
 void RayHitPointContainer::heepup(RayHitPoint** array,int axis,int index){
     if(index==0){
